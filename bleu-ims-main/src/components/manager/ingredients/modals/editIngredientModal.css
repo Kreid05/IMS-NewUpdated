@@ -1,0 +1,84 @@
+.editIngredient-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.editIngredient-modal {
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    width: 500px; /* Adjusted width to fit the new layout */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.editIngredient-modal h2 {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.editIngredient-modal label {
+    display: block;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.editIngredient-modal input,
+.editIngredient-modal select {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 8px 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    display: block;
+}
+
+.editIngredient-modal input[type="date"] {
+    padding-left: 5px;
+}
+
+.ingredient-group {
+    display: flex;
+    gap: 15px; /* Adds space between the fields */
+}
+
+.ingredient-amount,
+.ingredient-measurement,
+.ingredient-bestBefore,
+.ingredient-expiration {
+    flex: 1; /* Makes each field take equal width */
+}
+
+.editIngredient-modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.editIngredient-save-button {
+    background-color: #4B929D;
+    color: #fff;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.editIngredient-cancel-button {
+    background-color: #ccc;
+    color: #333;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}

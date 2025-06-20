@@ -1,0 +1,248 @@
+body {
+    background: #eaf6f8;
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.products {
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+}
+
+.roles {
+    flex: 1;
+    padding-right: 60px;
+    padding-top: 20px;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+
+.product-header {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background-color: #eaf6f8;
+}
+
+/* First row: tab buttons */
+.product-top-row {
+    display: flex;
+    gap: 12px;
+}
+
+/* Tab buttons remain the same */
+.product-tab-button {
+    width: 100px;
+    padding: 8px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    border-radius: 5px;
+    background-color: #ffffff;
+    color: black;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.product-type-button {
+    box-sizing: border-box;
+    background-color: #ff9900;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.export-pdf-button {
+    background-color: #4B929D;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.export-pdf-button:hover {
+    background-color: #3a7a84;
+}
+
+.product-type-button:hover {
+    background-color: #b86e00;
+}
+
+.product-tab-button.active {
+    background-color: #4B929D;
+    color: #ffffff;
+}
+
+.product-tab-button:hover {
+    opacity: 0.9;
+}
+
+/* Second row: search, filter, and add recipe */
+.product-bottom-row {
+    display: flex;
+    gap: 20px;
+    padding-bottom: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Filter container */
+.filter-product-container {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    gap: 8px;
+}
+
+.filter-product-container label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+.filter-product-select {
+    width: 150px;
+    padding: 10px 12px 10px 12px;
+    padding-right: 24px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: white;
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%23333" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 16px;
+}
+
+.sort-product-container {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    gap: 8px;
+}
+
+.sort-product-container label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+.sort-product-select {
+    width: 150px;
+    padding: 10px 12px 10px 12px;
+    padding-right: 24px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: white;
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%23333" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 16px;
+}
+
+/* Add recipe button */
+.add-product-button {
+    box-sizing: border-box;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.add-product-button:hover {
+    background-color: #0050a5;
+}
+
+/* Search box */
+.product-search-box {
+    flex-grow: 1;
+    max-width: 1000px;
+    padding: 12px 18px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
+    outline: none;
+    background-color: white;
+    background-image: url('https://cdn-icons-png.flaticon.com/512/622/622669.png');
+    background-size: 16px;
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 40px;
+    color: #333;
+}
+
+.product-table-container {
+    margin: 20px;
+    overflow-x: auto;
+}
+
+.product-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.product-table th,
+.product-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.product-table th {
+    background-color: #f4f4f4;
+    font-weight: 600;
+}
+
+.action-buttons button {
+    margin-right: 8px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: white;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+}
+
+.action-button.view {
+    background-color: #6c757d; /* Gray */
+}
+
+.action-button.edit {
+    background-color: #007bff; /* Blue */
+}
+
+.action-button.delete {
+    background-color: #dc3545; /* Red */
+}
+
+.action-buttons button:hover {
+    opacity: 0.85;
+}

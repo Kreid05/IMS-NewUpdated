@@ -1,0 +1,140 @@
+.view-product-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.view-product-modal {
+    background: #fff;
+    padding: 24px;
+    border-radius: 10px;
+    width: 400px;
+    max-height: 80vh; /* limits modal height to 80% of the viewport */
+    overflow-y: auto; /* enables vertical scrolling if needed */
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.view-product-close-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #555;
+}
+
+.view-product-modal-content {
+    margin-bottom: 24px;
+    font-size: 16px;
+    color: #444;
+    line-height: 1.6;
+}
+
+.view-product-name {
+    font-size: 24px;
+    font-weight: 700;
+    color: #4B929D;
+    margin-bottom: 8px;
+}
+
+.view-product-divider {
+    border: none;
+    border-top: 2px solid #ccc;
+    margin-bottom: 16px;
+}
+
+.view-product-description {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 24px;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+.view-product-category-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #888;
+    margin-bottom: 4px;
+}
+
+.view-product-category {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.view-product-size-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #888;
+    margin-bottom: 4px;
+}
+
+.view-product-size {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.view-product-price-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #888;
+    margin-bottom: 4px;
+}
+
+.view-product-price {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+
+.view-product-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.view-product-modal-edit-button,
+.view-product-modal-delete-button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.view-product-modal-edit-button {
+    background-color: #007bff;
+    color: white;
+}
+
+.view-product-modal-edit-button:hover {
+    background-color: #0050a5;
+}
+
+.view-product-modal-delete-button {
+    background-color: #dc3545;
+    color: white;
+}
+
+.view-product-modal-delete-button:hover {
+    background-color: #741922;
+    color: white;
+}

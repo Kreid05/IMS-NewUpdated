@@ -1,0 +1,55 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); /* dark overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px; /* spacing around modal for small screens */
+  overflow-y: auto; /* scroll if modal is tall */
+}
+
+.modal-container {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  width: 100%;
+  max-width: 600px; /* fixed max width for modal */
+  padding: 30px 40px;
+  box-sizing: border-box;
+  position: relative;
+  max-height: 90vh; /* max height to prevent overflow */
+  overflow-y: auto; /* scroll inside modal if content is tall */
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.modal-header h2 {
+  color: #4B929D;
+  margin: 10px;
+  margin-top: 0;
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  line-height: 1;
+  color: #4B929D;
+  transition: color 0.2s ease;
+}
+
+.modal-body {
+  width: 100%;
+  height: 100%;
+}

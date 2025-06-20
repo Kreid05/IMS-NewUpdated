@@ -1,0 +1,274 @@
+.addRecipe-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.addRecipe-modal-container {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+.addRecipe-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.addRecipe-modal-header h3 {
+    margin: 0;
+    color: #4B929D;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.addRecipe-close-button {
+    font-size: 28px;
+    cursor: pointer;
+    color: #666;
+    border: none;
+    background: none;
+    transition: color 0.2s ease;
+}
+
+.addRecipe-close-button:hover {
+    color: #4B929D;
+}
+
+.addRecipe-modal-form {
+    padding: 0 10px;
+}
+
+/* Form group styling to match product form */
+.recipe-form-group {
+    margin-bottom: 20px;
+}
+
+.recipe-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #555;
+    font-size: 14px;
+}
+
+.recipe-form-group input,
+.recipe-form-group select,
+.recipe-form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: #fff;
+    box-sizing: border-box;
+}
+
+.recipe-form-group input:focus,
+.recipe-form-group select:focus,
+.recipe-form-group textarea:focus {
+    outline: none;
+    border-color: #4B929D;
+    box-shadow: 0 0 0 3px rgba(75, 146, 157, 0.2);
+}
+
+.recipe-form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+    font-family: inherit;
+}
+
+.recipe-form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.recipe-form-row .recipe-form-group {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+/* Required asterisk styling */
+.required {
+    color: #dc3545;
+    margin-left: 2px;
+}
+
+/* Error styling */
+.error {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2) !important;
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 5px;
+    margin-bottom: 0;
+}
+
+/* Recipe sections styling */
+.recipe-section {
+    margin-bottom: 25px;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 20px;
+    background-color: #f8f9fa;
+}
+
+.recipe-section h4 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.recipe-add-button {
+    background-color: #4B929D;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 15px;
+    transition: all 0.2s ease;
+}
+
+.recipe-add-button:hover {
+    background-color: #3a747d;
+}
+
+.recipe-item {
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    padding: 15px;
+    transition: all 0.2s ease;
+}
+
+.recipe-item:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.recipe-item-row {
+    display: flex;
+    gap: 15px;
+    align-items: flex-end;
+}
+
+.recipe-item-field {
+    flex: 1;
+}
+
+.recipe-item-field label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 13px;
+    color: #555;
+    font-weight: 500;
+}
+
+.recipe-item-field input,
+.recipe-item-field select,
+.recipe-item-field textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #fff;
+    box-sizing: border-box;
+}
+
+.recipe-item-field input:focus,
+.recipe-item-field select:focus,
+.recipe-item-field textarea:focus {
+    outline: none;
+    border-color: #4B929D;
+    box-shadow: 0 0 0 2px rgba(75, 146, 157, 0.2);
+}
+
+.recipe-remove-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    height: 42px;
+    margin-bottom: 1px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.recipe-remove-button:hover {
+    background-color: #c82333;
+}
+
+.recipe-no-items {
+    text-align: center;
+    color: #888;
+    padding: 15px;
+    font-style: italic;
+}
+
+/* Submit button container and styling to match Add Product */
+.addRecipe-button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.addRecipe-submit-button {
+    background-color: #4B929D;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 120px;
+}
+
+.addRecipe-submit-button:hover {
+    background-color: #3a747d;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(75, 146, 157, 0.3);
+}
+
+.addRecipe-submit-button:disabled {
+    background-color: #a5c3c6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}

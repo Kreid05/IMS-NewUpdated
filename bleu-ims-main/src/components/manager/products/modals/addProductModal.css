@@ -1,0 +1,102 @@
+.addProduct-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.addProduct-modal-container {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    width: 400px;
+    position: relative;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+.addProduct-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.addProduct-modal-header h3 {
+    margin: 0;
+    color: #4B929D;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.addProduct-close-button {
+    font-size: 24px;
+    cursor: pointer;
+    color: #444;
+}
+
+.addProduct-modal-form label {
+    display: block;
+    margin-bottom: 15px;
+    font-weight: 500;
+    color: #333;
+}
+
+.addProduct-modal-form input,
+.addProduct-modal-form textarea,
+.addProduct-modal-form select {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 8px 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    display: block;
+}
+
+.addProduct-modal-form textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.addProduct-button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 30px;
+}
+
+.addProduct-submit-button {
+    width: 30%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.addProduct-submit-button:hover {
+    background-color: #0050a5;
+}
+
+.addProduct-required-asterisk {
+    color: red;
+}
+
+.addProduct-error {
+    border: 2px solid red;
+}
+
+.addProduct-error-message {
+    color: red;
+    font-size: 0.8em;
+    margin-top: 5px;
+}

@@ -1,0 +1,119 @@
+.editProduct-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.editProduct-modal-container {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    width: 400px;
+    position: relative;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+.editProduct-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.editProduct-modal-header h3 {
+    margin: 0;
+    color: #4B929D;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.editProduct-close-button {
+    font-size: 24px;
+    cursor: pointer;
+    color: #444;
+}
+
+.editProduct-modal-form label {
+    display: block;
+    margin-bottom: 15px;
+    font-weight: 500;
+    color: #333;
+}
+
+.editProduct-modal-form input,
+.editProduct-modal-form textarea,
+.editProduct-modal-form select {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 8px 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    display: block;
+}
+
+.editProduct-modal-form textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.editProduct-button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 30px;
+}
+
+.editProduct-submit-button {
+    min-width: 100px;
+    padding: 10px 20px;
+    background-color: #4B929D;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.editProduct-submit-button:hover {
+    background-color: #3a737c;
+}
+
+.editProduct-cancel-button {
+    min-width: 100px;
+    padding: 10px 20px;
+    background-color: #cccccc;
+    color: #333333;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.editProduct-cancel-button:hover {
+    background-color: #b3b3b3;
+}
+
+.editProduct-error {
+    border: 1px solid #dc3545 !important;
+}
+
+.editProduct-error-message {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 5px;
+    margin-bottom: 0;
+}
+
+.editProduct-required-asterisk {
+    color: #dc3545;
+    margin-left: 2px;
+}

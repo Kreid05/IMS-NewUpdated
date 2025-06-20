@@ -1,0 +1,139 @@
+* {
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+  }
+
+.wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Full height of viewport */
+    background-color: #4B929D;
+  }
+
+.login-container {
+    background-color: #fff;
+    border-radius: 30px;
+    width: 95%;
+    height: 90%;
+    overflow: hidden;
+    display: flex;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+.login-background {
+    background-image: url('../assets/login-vector.png');
+    background-repeat: no-repeat;
+    background-size: 90%;
+    background-position: center right;
+  }
+
+.login-form-container {
+    width: 100%;
+    height: 100%;
+    margin-top: 70px;
+    margin-left: 200px;
+  }
+
+.logo-login {
+    width: 180px;
+    margin-bottom: 0;
+    display: block;
+  }
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    width: 25%;
+    height: 50%;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+  
+.system-label {
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    color: #333;  
+    margin-bottom: 0;
+    margin-top: 40px;
+    line-height: 1.2;
+  }
+  
+.login-title {
+    font-size: 40px;
+    font-weight: 600;
+    font-style: normal;
+    margin: 0;
+    margin-bottom: 20px;
+    line-height: 0.5;
+  }
+  
+.input-group {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 0.75rem;
+    background-color: #fff;
+    margin-bottom: 10px;
+  }
+  
+.input-group input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 1rem;
+    padding-left: 0.5rem;
+    color: #333;
+  }
+  
+.icon {
+    font-size: 16px;
+    color: #444;
+  }
+  
+.eye-icon {
+    font-size: 1rem;
+    color: #888;
+    margin-left: auto;
+    cursor: pointer;
+  }
+  
+.login-button {
+    padding: 0.75rem;
+    font-size: 16px;
+    font-weight: 500;
+    font-style: normal;
+    background-color: #4B929D;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+.login-button:hover {
+    background-color: #3b7f89;
+  }
+  
+.forgot-password {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 300;
+    font-style: normal;
+    color: #555;
+  }
+  
+.forgot-password a {
+    color: #4B929D;
+    text-decoration: none;
+    font-weight: 500;
+  }

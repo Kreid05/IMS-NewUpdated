@@ -1,0 +1,116 @@
+/* Header */
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin: 30px;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 600;
+  color: #4B929D;
+  margin-top: 0;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.header-date {
+  font-size: 15px;
+  font-weight: 600;
+  color: #4B929D;
+  margin-right: 20px;
+  text-transform: uppercase;
+}
+
+.header-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  padding: 15px 15px;
+  position: relative;
+}
+
+.profile-pic {
+  width: 50px;
+  height: 50px;
+  border-radius: 10%;
+  background-image: url('https://media-hosting.imagekit.io/1123dd6cf5c544aa/screenshot_1746457481487.png?Expires=1841065483&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=kiHcXbHpirt9QHbMA4by~Kd4b2BrczywyVUfZZpks5ga3tnO8KlP8s5tdDpZQqinqOG30tGn0tgSCwVausjJ1OJ9~e6qPVjLXbglD-65hmsehYCZgEzeyGPPE-rOlyGJCgJC~GCZOu0jDKKcu2fefrClaqBBT3jaXoK4qhDPfjIFa2GCMfetybNs0RF8BtyKLgFGeEkvibaXhYxmzO8tksUKaLAMLbsPWvHBNuzV6Ar3mj~lllq7r7nrynNfdvbtuED7OGczSqZ8H-iopheAUhaWZftAh9tX2vYZCZZ8UztSEO3XUgLxMMtv9NnTei1omK00iJv1fgBjwR2lSqRk7w__');
+  background-size: cover;
+  background-position: center;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+}
+
+.profile-role {
+  font-size: 11px;
+  color: #888;
+}
+
+.profile-name {
+  font-weight: bold;
+  color: #4B929D;
+  font-size: 15px;
+}
+
+.dropdown-icon {
+  cursor: pointer;
+  font-size: 14px;
+  color: #898989;
+  /* Removed margin-top to fix alignment */
+  margin-top: 0;
+  margin-right: 30px;
+}
+
+.bell-icon {
+  font-size: 18px;
+  color: gray;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 10;
+  animation: fadeIn 0.3s ease;
+}
+
+.profile-dropdown ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.profile-dropdown li {
+  padding: 10px 20px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.profile-dropdown li:hover {
+  background-color: #f0f0f0;
+}

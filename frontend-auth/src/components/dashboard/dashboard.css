@@ -1,0 +1,198 @@
+body {
+  background: #eaf6f8;
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.dashboard {
+  display: flex;
+  flex-direction: row;
+  min-height: 100vh;
+}
+
+.dashboard-main {
+  flex: 1;
+  padding-right: 60px;
+  padding-top: 20px;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+.dashboard-contents {
+  margin-top: 60px;
+}
+
+/* Cards */
+.dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 15px;
+  height: 90px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.card-icon {
+  font-size: 20px;
+  color: #fff;
+  height: 25px;
+  width: 25px;
+  border-radius: 6px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: start;
+  margin-top: 5px;
+  margin-right: 10px;
+}
+
+.card.sales .card-icon { background: #007bff; }
+.card.revenue .card-icon { background: #28a745; }
+.card.orders .card-icon { background: #20c997; }
+.card.pendings .card-icon { background: #fd7e14; }
+
+.card-text {
+  flex: 1;
+  align-self: start;
+  margin-left: 10px;
+}
+
+.card-title {
+  font-size: 14px;
+  color: #666;
+  margin-top: 10px;
+}
+
+.card-details {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 15px;
+  gap: 8px;
+}
+
+.card-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.card-percent {
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+}
+
+.card-percent.green {
+  color: green;
+}
+
+.card-percent.red {
+  color: red;
+}
+
+/* Charts */
+.dashboard-charts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.chart-box {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+  height: 400px;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 22px;
+  font-weight: 600;
+  margin-left: 10px;
+  margin-bottom: 20px;
+}
+
+.chart-dropdown {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+}
+
+.chart-dropdown option {
+  background: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 10;
+  animation: fadeIn 0.3s ease;
+}
+
+.chart-dropdown:hover {
+  background-color: #f0f0f0;
+}
+
+/* Large screens (desktops) */
+@media (min-width: 1200px) {
+  .dashboard-main {
+    width: 80%;
+    max-width: 1920px;
+  }
+
+  .dashboard-cards {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Medium screens (tablets) */
+@media (max-width: 1024px) {
+  .dashboard-main {
+    width: 100%;
+    padding: 0 20px;
+  }
+
+  .dashboard-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-charts {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Small screens (mobile) */
+@media (max-width: 768px) {
+  .dashboard-main {
+    width: 100%;
+    padding: 15px;
+    flex-direction: column;
+  }
+
+  .dashboard-charts {
+    grid-template-columns: 1fr;
+  }
+  
+  .dashboard-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

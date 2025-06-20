@@ -1,0 +1,106 @@
+.view-ingredient-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.view-ingredient-modal {
+    background: #fff;
+    padding: 24px;
+    border-radius: 10px;
+    width: 400px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.view-ingredient-close-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #555;
+}
+
+.view-ingredient-product-name {
+    font-size: 24px;
+    font-weight: 700;
+    color: #4B929D;
+    margin-bottom: 8px;
+}
+
+.view-ingredient-divider {
+    border: none;
+    border-top: 2px solid #ccc;
+    margin-bottom: 16px;
+}
+
+.view-ingredient-amount-label,
+.view-ingredient-bestBefore-label,
+.view-ingredient-expiration-label,
+.view-ingredient-status-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #888;
+    margin-bottom: 4px;
+}
+
+.view-ingredient-amount,
+.view-ingredient-bestBefore,
+.view-ingredient-expiration,
+.view-ingredient-status {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 24px;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+.view-ingredient-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.view-ingredient-modal-edit-button,
+.view-ingredient-modal-delete-button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.view-ingredient-modal-edit-button {
+    background-color: #007bff;
+    color: white;
+}
+
+.view-ingredient-modal-edit-button:hover {
+    background-color: #0050a5;
+}
+
+.view-ingredient-modal-delete-button {
+    background-color: #dc3545;
+    color: white;
+}
+
+.view-ingredient-modal-delete-button:hover {
+    background-color: #741922;
+}
