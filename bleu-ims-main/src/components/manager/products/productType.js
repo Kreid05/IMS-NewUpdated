@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import "./productType.css";
 import DataTable from "react-data-table-component";
 import { FaEdit, FaArchive } from "react-icons/fa";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { confirmAlert } from "react-confirm-alert"; // Import react-confirm-alert
+import "../../reactConfirmAlert.css";
 
 const API_BASE_URL = "http://127.0.0.1:8001/ProductType";
 const getAuthToken = () => localStorage.getItem("authToken");
@@ -22,7 +26,7 @@ const ProductTypeModal = ({ onClose }) => {
     const fetchProductTypes = async () => {
         const token = getAuthToken();
         if (!token) {
-            alert("Authentication token not found.");
+            toast.error("Authentication token not found.");
             return;
         }
 
@@ -43,19 +47,19 @@ const ProductTypeModal = ({ onClose }) => {
             setProductTypes(formattedData);
         } catch (error) {
             console.error("Error fetching product types:", error);
-            alert("Failed to fetch product types.");
+            toast.error("Failed to fetch product types.");
         }
     };
 
     const handleAddType = async () => {
         const token = getAuthToken();
         if (!token) {
-            alert("Authentication token not found.");
+            toast.error("Authentication token not found.");
             return;
         }
 
         if (newTypeName.trim() === "") {
-            alert("Product type name cannot be empty.");
+            toast.error("Product type name cannot be empty.");
             return;
         }
 
@@ -81,10 +85,10 @@ const ProductTypeModal = ({ onClose }) => {
             setIsSizeRequired(false); // reset checkbox
             setShowAddFormModal(false);
             fetchProductTypes();
-            alert("Product type added successfully!");
+            toast.success("Product type added successfully!");
         } catch (error) {
             console.error("Error adding product type:", error);
-            alert("Failed to add product type.");
+            toast.error("Failed to add product type.");
         }
     };
 
@@ -100,12 +104,12 @@ const ProductTypeModal = ({ onClose }) => {
         e.preventDefault();
         const token = getAuthToken();
         if (!token) {
-            alert("Authentication token not found.");
+            toast.error("Authentication token not found.");
             return;
         }
 
         if (editTypeName.trim() === "") {
-            alert("Product type name cannot be empty.");
+            toast.error("Product type name cannot be empty.");
             return;
         }
 
@@ -128,39 +132,52 @@ const ProductTypeModal = ({ onClose }) => {
             setEditTypeID(null);
             setEditTypeName("");
             fetchProductTypes();
+            toast.success("Product type updated successfully!");
         } catch (error) {
             console.error("Error updating product type:", error);
-            alert("Failed to update product type.");
+            toast.error("Failed to update product type.");
         }
     };
 
-    const handleDelete = async (typeId) => {
-        const token = getAuthToken();
-        if (!token) {
-            alert("Authentication token not found.");
-            return;
-        }
+    const handleDelete = (typeId) => {
+        confirmAlert({
+            title: "Confirm to delete",
+            message: "Are you sure you want to delete this product type?",
+            parentElement: document.querySelector('.modal-content'),
+            buttons: [
+                {
+                    label: "Yes",
+                    onClick: async () => {
+                        const token = getAuthToken();
+                        if (!token) {
+                            toast.error("Authentication token not found.");
+                            return;
+                        }
+                        try {
+                            const response = await fetch(`${API_BASE_URL}/${typeId}`, {
+                                method: "DELETE",
+                                headers: { Authorization: `Bearer ${token}` },
+                            });
 
-        const confirmDelete = window.confirm("Are you sure you want to delete this product type?");
-        if (!confirmDelete) return;
+                            if (!response.ok) {
+                                const errorData = await response.json();
+                                throw new Error(errorData.detail || "Failed to delete product type.");
+                            }
 
-        try {
-            const response = await fetch(`${API_BASE_URL}/${typeId}`, {
-                method: "DELETE",
-                headers: { Authorization: `Bearer ${token}` },
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.detail || "Failed to delete product type.");
-            }
-
-            setProductTypes((prev) => prev.filter((pt) => pt.productTypeID !== typeId));
-            alert("Product type deleted successfully!");
-        } catch (error) {
-            console.error("Error deleting product type:", error);
-            alert("Failed to delete product type.");
-        }
+                            setProductTypes((prev) => prev.filter((pt) => pt.productTypeID !== typeId));
+                            toast.success("Product type deleted successfully!");
+                        } catch (error) {
+                            console.error("Error deleting product type:", error);
+                            toast.error("Failed to delete product type.");
+                        }
+                    },
+                },
+                {
+                    label: "No",
+                    onClick: () => {}, // Do nothing on cancel
+                },
+            ],
+        });
     };
 
     const columns = [
@@ -192,7 +209,7 @@ const ProductTypeModal = ({ onClose }) => {
                 <div className="modal-header">
                     <h2>Manage Product Types</h2>
                     <div className="button-container-right">
-                        <button onClick={() => setShowAddFormModal(true)} className="button-primary">Add Product Type</button>
+                        <button onClick={() => setShowAddFormModal(true)} className="add-Product-Type">Add Product Type</button>
                     </div>
                 </div>
 
@@ -269,8 +286,8 @@ const ProductTypeModal = ({ onClose }) => {
                                     <label htmlFor="editSizeRequired">Size Required?</label>
                                 </div>
                                 <div className="modal-actions">
-                                    <button type="submit" className="button-primary">Update</button>
-                                    <button onClick={() => setIsEditing(false)} className="button-secondary">Cancel</button>
+                                    <button type="submit" className="update-Button">Update</button>
+                                    <button onClick={() => setIsEditing(false)} className="cancel-Update">Cancel</button>
                                 </div>
                             </form>
                         </div>
@@ -280,6 +297,7 @@ const ProductTypeModal = ({ onClose }) => {
                 <button onClick={onClose} className="button-secondary" style={{ marginTop: "1em" }}>
                     Close
                 </button>
+                <ToastContainer />
             </div>
         </div>
     );

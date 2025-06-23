@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "./editRecipeModal.css";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const API_BASE_URL = "http://127.0.0.1:8005";
 const getAuthToken = () => localStorage.getItem("authToken");
@@ -60,7 +62,7 @@ function EditRecipeModal({ recipe, onClose, onUpdate, products, ingredients: ini
                 });
             } catch (err) {
                 console.error("Error:", err);
-                alert("Error fetching recipe data.");
+                toast.error("Error fetching recipe data.");
             }
         };
 
@@ -182,10 +184,11 @@ function EditRecipeModal({ recipe, onClose, onUpdate, products, ingredients: ini
 
             const result = await response.json();
             if (onUpdate) onUpdate(result);
+            toast.success("Recipe updated successfully!");
             onClose();
         } catch (err) {
             console.error("Update error:", err);
-            alert("Failed to update recipe.");
+            toast.error("Failed to update recipe.");
         }
     };
 

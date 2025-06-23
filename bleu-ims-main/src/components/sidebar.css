@@ -108,3 +108,16 @@
   width: 20px;
   height: 20px;
 }
+
+.ps-submenu-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #444;
+  padding: 10px 15px;
+  cursor: pointer;
+  user-select: none;
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

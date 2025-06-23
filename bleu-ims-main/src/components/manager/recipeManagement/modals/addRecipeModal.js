@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import "./addRecipeModal.css";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const API_BASE_URL = "http://127.0.0.1:8005";
 const getAuthToken = () => localStorage.getItem("authToken");
@@ -94,7 +96,7 @@ function AddRecipeModal({ onClose, onSubmit, type, products, initialIngredients,
             const token = getAuthToken();
 
             if (!token) {
-                alert("Authentication token not found.");
+                toast.error("Authentication token not found.");
                 handleLogout();
                 return;
             }
@@ -138,10 +140,11 @@ function AddRecipeModal({ onClose, onSubmit, type, products, initialIngredients,
 
                 const result = await response.json();
                 if (onSubmit) onSubmit(result);
+                toast.success("Recipe added successfully!");
                 onClose();
             } catch (error) {
                 console.error("Error adding recipe:", error.message);
-                alert(`Failed to add recipe. Server response:\n\n${error.message}`);
+                toast.error(`Failed to add recipe. Server response:\n\n${error.message}`);
             }
         }
     };

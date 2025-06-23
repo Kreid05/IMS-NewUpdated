@@ -143,7 +143,7 @@
 }
 
 .recipe-add-button {
-    background-color: #4B929D;
+    background-color: #007bff;
     color: white;
     border: none;
     border-radius: 8px;
@@ -159,7 +159,7 @@
 }
 
 .recipe-add-button:hover {
-    background-color: #3a747d;
+    background-color: #0050a5;
 }
 
 .recipe-item {
@@ -248,7 +248,7 @@
 }
 
 .addRecipe-submit-button {
-    background-color: #4B929D;
+    background-color: #007bff;
     color: white;
     border: none;
     border-radius: 8px;
@@ -261,7 +261,7 @@
 }
 
 .addRecipe-submit-button:hover {
-    background-color: #3a747d;
+    background-color: #0050a5;
     transform: translateY(-1px);
     box-shadow: 0 2px 8px rgba(75, 146, 157, 0.3);
 }

@@ -64,7 +64,7 @@
 }
 
 /* Buttons */
-.button-primary {
+.add-Product-Type {
     padding: 10px 20px;
     background-color: #007bff;
     color: white;
@@ -75,11 +75,25 @@
     margin-bottom: 1rem;
 }
 
-.button-primary:hover {
+.add-Product-Type:hover {
     background-color: #0050a5;
 }
 
-.button-secondary {
+.update-Button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0.3rem;
+}   
+
+.update-Button:hover {
+    background-color: #0050a5;
+}
+
+.cancel-Update {
     padding: 10px 20px;
     background-color: #ccc;
     color: #333;
@@ -89,7 +103,7 @@
     margin: 0.3rem;
 }
 
-.button-secondary:hover {
+.cancel-Update:hover {
     background-color: #aaa;
 }
 
@@ -124,7 +138,8 @@
 /* Modal actions */
 .modal-actions {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: flex-end;
     align-items: center;
     gap: 10px;
     margin-top: 1rem;
@@ -139,10 +154,26 @@
 /* checkbox */
 .form-group-checkbox {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
     margin-bottom: 1rem;
+}
+
+.form-group-checkbox label {
+    white-space: nowrap;
+    display: flex;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+    width: auto;
+    margin-left: 0.5rem;
+    margin-right: 15rem;
+}
+
+.form-group-checkbox input[type="checkbox"] {
+    margin: 0;
+    padding: 0;
 }
 
 .newProductType-modal-actions {
@@ -162,7 +193,6 @@
     border-radius: 5px;
     cursor: pointer;
     margin: 0.3rem;
-    margin-bottom: 1rem;
 }
 
 .newProductType-button-primary:hover {
@@ -180,5 +210,19 @@
 }
 
 .newProductType-button-secondary:hover {
+    background-color: #aaa;
+}
+
+.button-secondary {
+    padding: 10px 20px;
+    background-color: #ccc;
+    color: #333;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0.3rem;
+}
+
+.button-secondary:hover {
     background-color: #aaa;
 }

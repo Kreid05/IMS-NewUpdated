@@ -1,6 +1,8 @@
 import React, { useState, useCallback, useEffect} from "react";
 import { useNavigate } from 'react-router-dom';
 import "./addIngredientModal.css";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const getAuthToken = () => localStorage.getItem("authToken");
 
@@ -53,7 +55,7 @@ function AddIngredientModal({ onClose, onSuccess }) {
         if (Object.keys(newErrors).length === 0) {
             const token = getAuthToken();
             if (!token) {
-                alert("Authentication token not found. Please log in again.");
+                toast.error("Authentication token not found. Please log in again.");
                 handleLogout();
                 return;
             }
@@ -82,10 +84,12 @@ function AddIngredientModal({ onClose, onSuccess }) {
                 }
 
                 if (onSuccess) onSuccess(); 
+                toast.success("Ingredient added successfully");
+                onClose();
 
             } catch (error) {
                 console.error("Error adding ingredient:", error);
-                alert(`Error: ${error.message}`);
+                toast.error(`Error: ${error.message}`);
             }
         }
     };

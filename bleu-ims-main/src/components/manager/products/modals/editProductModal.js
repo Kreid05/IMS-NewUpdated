@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import "./editProductModal.css";
 
 const API_PRODUCT_TYPE_URL = "http://127.0.0.1:8001/ProductType";
@@ -164,6 +166,7 @@ function EditProductModal({ product, onClose, onUpdate }) {
                 throw new Error(errorDetail);
             }
             if (onUpdate) onUpdate(result);
+            toast.success("Product updated successfully");
             onClose();
         } catch (error) {
             let displayError = error.message;
@@ -276,7 +279,7 @@ function EditProductModal({ product, onClose, onUpdate }) {
                     )}
 
                     <label>
-                        Image (Optional)
+                        Image
                         <input
                             type="file"
                             accept="image/*"

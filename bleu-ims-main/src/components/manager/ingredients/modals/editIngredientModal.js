@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./editIngredientModal.css";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const API_BASE_URL = "http://127.0.0.1:8002";
 const getAuthToken = () => localStorage.getItem("authToken");
@@ -36,7 +38,7 @@ function EditIngredientModal({ ingredient, onClose, onUpdate }) {
 
         const token = getAuthToken();
         if (!token) {
-            alert("Authentication token not found.");
+            toast.error("Authentication token not found.");
             return;
         }
 
@@ -50,7 +52,7 @@ function EditIngredientModal({ ingredient, onClose, onUpdate }) {
 
         setIsLoading(true);
 
-        // update product
+        // Update ingredient
         try {
             const response = await fetch(`${API_BASE_URL}/ingredients/ingredients/${ingredient.IngredientID}`, {
                 method: "PUT",
@@ -67,10 +69,11 @@ function EditIngredientModal({ ingredient, onClose, onUpdate }) {
 
             const updatedData = await response.json();
             onUpdate(updatedData);
+            toast.success("Ingredient updated successfully");
             onClose();
         } catch (error) {
             console.error("Error updating ingredient:", error);
-            alert("Error updating ingredient.");
+            toast.error("Error updating ingredient.");
         } finally {
             setIsLoading(false);
         }
@@ -180,6 +183,7 @@ function EditIngredientModal({ ingredient, onClose, onUpdate }) {
                         </button>
                     </div>
                 </form>
+                <ToastContainer />
             </div>
         </div>
     );

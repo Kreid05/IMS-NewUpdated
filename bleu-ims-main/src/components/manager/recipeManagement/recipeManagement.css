@@ -28,7 +28,6 @@
   border-radius: 8px;
   box-shadow: none;
   margin: 20px;
-  padding: 20px;
 }
 
 .recipe-top-row {
@@ -49,14 +48,15 @@
   padding: 10px 20px;
   border: none;
   border-radius: 8px;
-  background-color: #4B929D;
-  color: white;
+  background-color: white;
+  color: black;
   cursor: pointer;
   font-weight: 500;
 }
 
 .recipe-tab-button.active {
   background-color: #3a7179;
+  color: white;
 }
 
 .search-box {
@@ -83,7 +83,7 @@
 }
 
 .add-recipe-button {
-  background-color: #4B929D;
+  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 4px;
@@ -94,8 +94,11 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 15px;
   transition: all 0.2s ease;
+}
+
+.add-recipe-button:hover {
+  background-color: #0050a5;
 }
 
 .recipe-grid {
@@ -149,8 +152,7 @@
   justify-content: flex-start;
 }
 
-.recipe-view-button, 
-.recipe-edit-button {
+.recipe-view-button {
   background-color: white;
   color: #4B929D;
   border: none;
@@ -162,17 +164,34 @@
   font-size: 14px;
   margin-right: 10px; 
   flex-shrink: 0; 
-}
-
-.recipe-view-button:hover, 
-.recipe-edit-button:hover {
+} 
+.recipe-view-button:hover {
   background-color: #f0f0f0;
   transform: scale(1.05);
 }
 
+.recipe-edit-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  margin-right: 10px; 
+  flex-shrink: 0; 
+}
+
+.recipe-edit-button:hover {
+  background-color: #0050a5;
+  transform: scale(1.05);
+}
+
 .recipe-delete-button {
-  background-color: white;
-  color: #4B929D;
+  background-color: #dc3545;
+  color: white;
   border: none;
   border-radius: 8px;
   padding: 8px 16px;
@@ -183,8 +202,7 @@
   flex-shrink: 0; 
 }
 
-.recipe-view-button:hover, 
 .recipe-delete-button:hover {
-  background-color: #f0f0f0;
+  background-color: #c82333;
   transform: scale(1.05);
 }

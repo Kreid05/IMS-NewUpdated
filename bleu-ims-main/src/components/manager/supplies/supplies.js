@@ -2,13 +2,17 @@ import React, { useState , useEffect, useCallback } from "react";
 import { useNavigate } from 'react-router-dom';
 import "./supplies.css";
 import Sidebar from "../../sidebar";
-import { FaChevronDown, FaFolderOpen, FaEdit, FaArchive } from "react-icons/fa";
+import { FaChevronDown, FaEye, FaEdit, FaArchive } from "react-icons/fa";
 import DataTable from "react-data-table-component";
 import AddSupplyModal from './modals/addSupplyModal';
 import EditSupplyModal from "./modals/editSupplyModal";
 import ViewSupplyModal from "./modals/viewSupplyModal";
 import Header from "../../header";
 import { jwtDecode } from 'jwt-decode';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import "../../reactConfirmAlert.css";
 
 const API_BASE_URL = "http://127.0.0.1:8003";
 const getAuthToken = () => localStorage.getItem("authToken");
@@ -82,7 +86,7 @@ function Supplies() {
     const fetchSupplies = useCallback(async () => {
         const token = getAuthToken();
         if (!token) {
-            alert("Authentication token not found.");
+            toast.error("Authentication token not found.");
             handleLogout();
             return;
         }
@@ -120,30 +124,45 @@ function Supplies() {
     };
 
     const handleDelete = async (suppliesIdToDelete) => {
-        if (!window.confirm("Are you sure you want to delete this item?")) return;
+        confirmAlert({
+            title: 'Confirm to delete',
+            message: 'Are you sure you want to delete this item?',
+            buttons: [
+                {
+                    label: 'Yes',
+                    onClick: async () => {
+                        const token = getAuthToken();
+                        if (!token) {
+                            toast.error("Authentication token not found.");
+                            return;
+                        }
 
-        const token = getAuthToken();
-        if (!token) {
-            alert("Authentication token not found.");
-            return;
-        }
+                        try {
+                            const response = await fetch(`${API_BASE_URL}/materials/materials/${suppliesIdToDelete}`, {
+                                method: "DELETE",
+                                headers: { Authorization: `Bearer ${token}` },
+                            });
 
-        try {
-            const response = await fetch(`${API_BASE_URL}/materials/materials/${suppliesIdToDelete}`, {
-                method: "DELETE",
-                headers: { Authorization: `Bearer ${token}` },
-            });
+                            if (!response.ok) {
+                                const errorData = await response.json();
+                                throw new Error(errorData.detail || "Failed to delete ingredient.");
+                            }
 
-            if (!response.ok) {
-                 const errorData = await response.json();
-                 throw new Error(errorData.detail || "Failed to delete ingredient.");
-            }
+                            toast.success("Supply/Material deleted successfully.");
 
-            fetchSupplies(); // refresh list after deletion
-        } catch (error) {
-            console.error("Error deleting item:", error);
-            alert("Failed to delete item.");
-        }
+                            fetchSupplies(); // refresh list after deletion
+                        } catch (error) {
+                            console.error("Error deleting item:", error);
+                            toast.error("Failed to delete item.");
+                        }
+                    }
+                },
+                {
+                    label: 'No',
+                    onClick: () => {}
+                }
+            ]
+        });
     };
 
     const columns = [
@@ -171,7 +190,7 @@ function Supplies() {
             name: "ACTIONS",
             cell: (row) => (
                 <div className="action-buttons">
-                    <button className="action-button view" onClick={() => handleView(row)}><FaFolderOpen /></button>
+                    <button className="action-button view" onClick={() => handleView(row)}><FaEye /></button>
                     <button className="action-button edit" onClick={() => handleEdit(row)}><FaEdit /></button>
                     <button className="action-button delete" onClick={() => handleDelete(row.MaterialID)}><FaArchive /></button>
                 </div>
@@ -290,9 +309,8 @@ function Supplies() {
                     }}
                 />
             )}
-
+            <ToastContainer />
         </div>
-        
     );
 }
 

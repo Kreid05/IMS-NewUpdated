@@ -66,7 +66,7 @@
 }
 
 .editIngredient-save-button {
-    background-color: #4B929D;
+    background-color: #007bff;
     color: #fff;
     padding: 8px 14px;
     border: none;
@@ -74,11 +74,19 @@
     cursor: pointer;
 }
 
+.editIngredient-save-button:hover {
+    background-color: #0050a5;
+}
+
 .editIngredient-cancel-button {
-    background-color: #ccc;
+    background-color: #cccccc;
     color: #333;
     padding: 8px 14px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
+}
+
+.editIngredient-cancel-button:hover {
+    background-color: #b3b3b3;
 }

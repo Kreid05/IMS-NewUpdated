@@ -84,7 +84,7 @@
 .addIngredient-submit-button {
     width: 40%;
     padding: 10px;
-    background-color: #4B929D;
+    background-color: #007bff;
     color: white;
     font-weight: bold;
     border: none;
@@ -94,7 +94,7 @@
 }
 
 .addIngredient-submit-button:hover {
-    background-color: #3c7c86;
+    background-color: #0050a5;
 }
 
 .addIngredient-required-asterisk {

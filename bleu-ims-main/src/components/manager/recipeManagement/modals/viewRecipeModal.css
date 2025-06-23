@@ -84,7 +84,7 @@
 }
 
 .viewRecipe-edit-button {
-    background-color: #4B929D;
+    background-color: #007bff;
     color: white;
     border: none;
     border-radius: 6px;
@@ -95,5 +95,5 @@
 }
 
 .viewRecipe-edit-button:hover {
-    background-color: #3a7a84;
+    background-color: #0050a5;
 }

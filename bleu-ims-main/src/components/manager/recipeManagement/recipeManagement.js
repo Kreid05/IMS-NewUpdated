@@ -9,6 +9,10 @@ import EditRecipeModal from "./modals/editRecipeModal";
 import ViewRecipeModal from "./modals/viewRecipeModal";
 import Header from "../../header";
 import { jwtDecode } from 'jwt-decode';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import "../../reactConfirmAlert.css";
 
 const RECIPE_API_URL = "http://127.0.0.1:8005/recipes/recipes/";
 const PRODUCTS_API_URL = "http://127.0.0.1:8001/is_products/products/";
@@ -158,27 +162,40 @@ function RecipeManagement() {
     };
 
     const handleDelete = async (recipeId) => {
-        if (window.confirm("Are you sure you want to delete this recipe?")) {
-            const token = getAuthToken();
-            try {
-                const response = await fetch(`${RECIPE_API_URL}${recipeId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        Authorization: `Bearer ${token}`
+        confirmAlert({
+            title: 'Confirm to delete',
+            message: 'Are you sure you want to delete this merchandise item?',
+            buttons: [
+                {
+                    label: 'Yes',
+                    onClick: async () => {
+                        const token = getAuthToken();
+                        try {
+                            const response = await fetch(`${RECIPE_API_URL}${recipeId}`, {
+                                method: 'DELETE',
+                                headers: {
+                                    Authorization: `Bearer ${token}`
+                                }
+                            });
+                            if (response.ok) {
+                                toast.success("Recipe deleted successfully.");
+                                refreshAllData();
+                            } else {
+                                const errorData = await response.json();
+                                toast.error(`Failed to delete recipe: ${errorData.detail || response.statusText}`);
+                            }
+                        } catch (error) {
+                            console.error("Delete recipe error:", error);
+                            toast.error("An error occurred while deleting the recipe.");
+                        }
                     }
-                });
-                if (response.ok) {
-                    alert("Recipe deleted successfully.");
-                    refreshAllData();
-                } else {
-                    const errorData = await response.json();
-                    alert(`Failed to delete recipe: ${errorData.detail || response.statusText}`);
+                },
+                {
+                    label: 'No',
+                    onClick: () => {}
                 }
-            } catch (error) {
-                console.error("Delete recipe error:", error);
-                alert("An error occurred while deleting the recipe.");
-            }
-        }
+            ]
+        });
     };
 
     return (
@@ -254,6 +271,7 @@ function RecipeManagement() {
                         }}
                     />
                 )}
+                <ToastContainer />
             </div>
         </div>
     );

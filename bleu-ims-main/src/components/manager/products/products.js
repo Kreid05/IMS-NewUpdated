@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from 'react-router-dom';
 import "./products.css"; 
 import Sidebar from "../../sidebar"; 
-import { FaChevronDown, FaFolderOpen, FaEdit, FaArchive, FaPlusSquare } from "react-icons/fa";
+import { FaChevronDown, FaEye, FaEdit, FaArchive } from "react-icons/fa";
 import DataTable from "react-data-table-component";
 import ProductTypeModal from './productType';
 import AddProductModal from './modals/addProductModal';
@@ -12,14 +12,15 @@ import AddSizeModal from './modals/addSizeModal';
 import Header from "../../header";
 import { jwtDecode } from 'jwt-decode';
 import { confirmAlert } from 'react-confirm-alert';
-import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+import "../../reactConfirmAlert.css";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+import loadingAnimation from "../../../assets/animation/loading.webm";
 
 const API_BASE_URL = "http://127.0.0.1:8001";
 const getAuthToken = () => localStorage.getItem("authToken"); 
 const DEFAULT_PROFILE_IMAGE = "https://media-hosting.imagekit.io/1123dd6cf5c544aa/screenshot_1746457481487.png?Expires=1841065483&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=kiHcXbHpirt9QHbMA4by~Kd4b2BrczywyVUfZZpks5ga3tnO8KlP8s5tdDpZQqinqOG30tGn0tgSCwVausjJ1OJ9~e6qPVjLXbglD-65hmsehYCZgEzeyGPPE-rOlyGJCgJC~GCZOu0jDKKcu2fefrClaqBBT3jaXoK4qhDPfjIFa2GCMfetybNs0RF8BtyKLgFGeEkvibaXhYxmzO8tksUKaLAMLbsPWvHBNuzV6Ar3mj~lllq7r7nrynNfdvbtuED7OGczSqZ8H-iopheAUhaWZftAh9tX2vYZCZZ8UztSEO3XUgLxMMtv9NnTeiomK00iJv1fgBjwR2lSqRk7w__";
-
 
 function Products() {
   const currentDate = new Date().toLocaleString("en-US", {
@@ -32,6 +33,7 @@ function Products() {
   const [activeTab, setActiveTab] = useState(null);
   const [productTypes, setProductTypes] = useState([]);
   const [products, setProducts] = useState([]); 
+  const [loading, setLoading] = useState(true);
   const [showProductTypeModal, setShowProductTypeModal] = useState(false);
   const [showAddProductModal, setShowAddProductModal] = useState(false);
   const [showEditProductModal, setShowEditProductModal] = useState(false);
@@ -116,8 +118,10 @@ function Products() {
       }
       const data = await response.json(); 
       setProducts(data);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching products:", error);
+      setLoading(false);
     }
   }, []);
 
@@ -165,7 +169,7 @@ function Products() {
           onClick: () => {
             const token = getAuthToken();
             if (!token) {
-              alert("Authentication token not found.");
+              toast.error("Authentication token not found.");
               return;
             }
             fetch(`${API_BASE_URL}/is_products/products/${id}`, {
@@ -204,7 +208,7 @@ function Products() {
     fetchProducts(); 
     setShowAddSizeModal(false);
     setProductForSizeAddition(null);
-    alert(`Size '${newSizeData.SizeName}' added to product ID ${productId}.`);
+    toast.success(`Size '${newSizeData.SizeName}' added to product ID ${productId}.`);
   };
 
   const columns = [
@@ -228,7 +232,7 @@ function Products() {
       },
       width: "12%", center: true, ignoreRowClick: true, allowOverflow: true,
     },
-    { name: "NAME", selector: (row) => row.ProductName, wrap: true, width: "15%" },
+    { name: "NAME", selector: (row) => row.ProductName, wrap: true, width: "14%" },
     {
       name: "SIZE",
       selector: (row) =>
@@ -248,7 +252,7 @@ function Products() {
       name: "ACTIONS",
       cell: (row) => (
         <div className="action-buttons">
-          <button className="action-button view" title="View Product" onClick={() => handleView(row)}><FaFolderOpen /></button>
+          <button className="action-button view" title="View Product" onClick={() => handleView(row)}><FaEye /></button>
           <button className="action-button edit" title="Edit Product" onClick={() => handleEdit(row)}><FaEdit /></button>
           <button className="action-button delete" title="Delete Product" onClick={() => handleDelete(row.ProductID)}><FaArchive /></button>
         </div>
@@ -317,37 +321,49 @@ function Products() {
         </div>
 
         <div className="products-content">
-          <DataTable
-            columns={columns}
-            data={filteredProducts}
-            striped
-            highlightOnHover
-            responsive
-            pagination
-            customStyles={{
-              headCells: {
-                style: {
-                  backgroundColor: "#4B929D",
-                  color: "#fff",
-                  fontWeight: "600",
-                  fontSize: "14px",
-                  padding: "12px",
-                  textTransform: "uppercase",
-                  textAlign: "center",
-                  letterSpacing: "1px",
+          {loading ? (
+            <div className="loading-container">
+              <video
+                src={loadingAnimation}
+                autoPlay
+                loop
+                muted
+                className="loading-animation"
+              />
+            </div>
+          ) : (
+            <DataTable
+              columns={columns}
+              data={filteredProducts}
+              striped
+              highlightOnHover
+              responsive
+              pagination
+              customStyles={{
+                headCells: {
+                  style: {
+                    backgroundColor: "#4B929D",
+                    color: "#fff",
+                    fontWeight: "600",
+                    fontSize: "14px",
+                    padding: "12px",
+                    textTransform: "uppercase",
+                    textAlign: "center",
+                    letterSpacing: "1px",
+                  },
                 },
-              },
-              rows: { style: { minHeight: "72px", alignItems: 'center' } },
-              cells: { style: { paddingLeft: '16px', paddingRight: '16px', textAlign: 'left' } },
-            }}
-            noDataComponent={<div>No products found.</div>}
-            paginationComponentOptions={{
-                rowsPerPageText: 'Rows per page:',
-                rangeSeparatorText: 'of',
-                selectAllRowsItem: true,
-                selectAllRowsItemText: 'All',
-            }}
-          />
+                rows: { style: { minHeight: "72px", alignItems: 'center' } },
+                cells: { style: { paddingLeft: '16px', paddingRight: '16px', textAlign: 'left' } },
+              }}
+              noDataComponent={<div>No products found.</div>}
+              paginationComponentOptions={{
+                  rowsPerPageText: 'Rows per page:',
+                  rangeSeparatorText: 'of',
+                  selectAllRowsItem: true,
+                  selectAllRowsItemText: 'All',
+              }}
+            />
+          )}
         </div>
       </div>
 

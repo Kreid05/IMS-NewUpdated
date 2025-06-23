@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "./addSupplyModal.css";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const getAuthToken = () => localStorage.getItem("authToken");
 
@@ -30,7 +32,7 @@ function AddSupplyModal({ onClose, onSubmit }) {
          if (Object.keys(newErrors).length === 0) {
             const token = getAuthToken();
             if (!token) {
-                alert("Authentication token not found.");
+                toast.error("Authentication token not found.");
                 return;
             }
 
@@ -57,11 +59,12 @@ function AddSupplyModal({ onClose, onSubmit }) {
 
                 const result = await response.json();
                 if (onSubmit) onSubmit(result);
+                toast.success("Supply/Material added successfully");
                 onClose();
 
             } catch (error) {
                 console.error("Error adding item:", error);
-                alert("Failed to add item.");
+                toast.error("Failed to add item.");
             }
         }
     };

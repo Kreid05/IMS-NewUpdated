@@ -95,7 +95,7 @@
 }
 
 .add-ingredient-button {
-    background-color: #4B929D;
+    background-color: #007bff;
     color: white;
     border: none;
     border-radius: 4px;
@@ -112,7 +112,7 @@
 }
 
 .editRecipe-submit-button {
-    background-color: #4B929D;
+    background-color: #007bff;
     color: white;
     border: none;
     border-radius: 6px;
@@ -256,7 +256,7 @@
 
 /* Add buttons */
 .editRecipe-add-button {
-    background-color: #4B929D;
+    background-color: #007bff;
     color: white;
     border: none;
     border-radius: 8px;
@@ -272,7 +272,7 @@
 }
 
 .editRecipe-add-button:hover {
-    background-color: #3a747d;
+    background-color: #0050a5;
 }
 
 /* Item container inside section */
@@ -353,7 +353,7 @@
 }
 
 .editRecipe-submit-button {
-    background-color: #4B929D;
+    background-color: #007bff;
     color: white;
     border: none;
     border-radius: 8px;
@@ -366,7 +366,7 @@
 }
 
 .editRecipe-submit-button:hover {
-    background-color: #3a747d;
+    background-color: #0050a5;
     transform: translateY(-1px);
     box-shadow: 0 2px 8px rgba(75, 146, 157, 0.3);
 }

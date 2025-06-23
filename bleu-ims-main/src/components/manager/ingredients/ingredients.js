@@ -2,13 +2,17 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from 'react-router-dom';
 import "./ingredients.css";
 import Sidebar from "../../sidebar";
-import { FaChevronDown, FaFolderOpen, FaEdit, FaArchive } from "react-icons/fa";
+import { FaChevronDown, FaEye, FaEdit, FaArchive } from "react-icons/fa";
 import DataTable from "react-data-table-component";
 import AddIngredientModal from './modals/addIngredientModal';
 import EditIngredientModal from './modals/editIngredientModal';
 import ViewIngredientModal from './modals/viewIngredientModal';
 import Header from "../../header";
 import { jwtDecode } from 'jwt-decode';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import "../../reactConfirmAlert.css";
 
 const API_BASE_URL = "http://127.0.0.1:8002";
 const getAuthToken = () => localStorage.getItem("authToken");
@@ -81,7 +85,7 @@ function Ingredients() {
     const fetchIngredients = useCallback(async () => {
         const token = getAuthToken();
         if (!token) {
-            alert("Authentication token not found.");
+            toast.error("Authentication token not found.");
             handleLogout();
             return;
         }
@@ -100,7 +104,7 @@ function Ingredients() {
             setIngredients(data); // Set the raw data directly
         } catch (error) {
             console.error("Error fetching ingredients:", error);
-            alert(`Session expired or unauthorized: ${error.message}. Please login again.`);
+            toast.error(`Session expired or unauthorized: ${error.message}. Please login again.`);
         }
     }, [handleLogout]);
 
@@ -119,31 +123,46 @@ function Ingredients() {
     };
 
     const handleDelete = async (ingredientIdToDelete) => {
-        if (!window.confirm("Are you sure you want to delete this ingredient?")) return;
+        confirmAlert({
+            title: 'Confirm to delete',
+            message: 'Are you sure you want to delete this ingredient?',
+            buttons: [
+                {
+                    label: 'Yes',
+                    onClick: async () => {
+                        const token = getAuthToken();
+                        if (!token) {
+                            toast.error("Authentication token not found.");
+                            return;
+                        }
+                        
+                        try {
+                            const response = await fetch(`${API_BASE_URL}/ingredients/ingredients/${ingredientIdToDelete}`, {
+                                method: "DELETE",
+                                headers: { Authorization: `Bearer ${token}` },
+                            });
 
-        const token = getAuthToken();
-        if (!token) {
-            alert("Authentication token not found.");
-            return;
-        }
-        
-        try {
-            const response = await fetch(`${API_BASE_URL}/ingredients/ingredients/${ingredientIdToDelete}`, {
-                method: "DELETE",
-                headers: { Authorization: `Bearer ${token}` },
-            });
-
-            if (!response.ok) {
-                 const errorData = await response.text();
-                 throw new Error(errorData.detail || "Failed to delete ingredient.");
-            }
-            
-            // refetch data to ensure consistency
-            fetchIngredients();
-        } catch (error) {
-            console.error("Error deleting ingredient:", error);
-            alert(`Failed to delete ingredient: ${error.message}`);
-        }
+                            if (!response.ok) {
+                                const errorData = await response.text();
+                                throw new Error(errorData.detail || "Failed to delete ingredient.");
+                            }
+                            
+                            toast.success("Ingredient deleted successfully.");
+                            
+                            // refetch data to ensure consistency
+                            fetchIngredients();
+                        } catch (error) {
+                            console.error("Error deleting ingredient:", error);
+                            toast.error(`Failed to delete ingredient: ${error.message}`);
+                        }
+                    }
+                },
+                {
+                    label: 'No',
+                    onClick: () => {}
+                }
+            ]
+        });
     };
 
     const columns = [
@@ -172,7 +191,7 @@ function Ingredients() {
             name: "ACTIONS",
             cell: (row) => (
                 <div className="action-buttons">
-                    <button className="action-button view" onClick={() => handleView(row)}><FaFolderOpen /></button>
+                    <button className="action-button view" onClick={() => handleView(row)}><FaEye /></button>
                     <button className="action-button edit" onClick={() => handleEdit(row)}><FaEdit /></button>
                     <button className="action-button delete" onClick={() => handleDelete(row.IngredientID)}><FaArchive /></button>
                 </div>
@@ -296,7 +315,7 @@ function Ingredients() {
                     }}
                 />
             )}
-
+            <ToastContainer />
         </div>
     );
 }

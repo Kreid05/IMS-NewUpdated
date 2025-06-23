@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./editSupplyModal.css";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const API_BASE_URL = "http://127.0.0.1:8003";
 const getAuthToken = () => localStorage.getItem("authToken");
@@ -33,7 +35,7 @@ function EditSupplyModal({ supply, onClose, onUpdate }) {
 
         const token = getAuthToken();
         if (!token) {
-            alert("Authentication token not found.");
+            toast.error("Authentication token not found.");
             return;
         }
 
@@ -63,10 +65,11 @@ function EditSupplyModal({ supply, onClose, onUpdate }) {
 
             const updatedData = await response.json();
             onUpdate(updatedData);
+            toast.success("Supply/Material updated successfully");
             onClose();
         } catch (error) {
             console.error("Error updating item:", error);
-            alert("Error updating item.");
+            toast.error("Error updating item.");
         } finally {
             setIsLoading(false);
         }

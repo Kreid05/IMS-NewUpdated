@@ -95,6 +95,8 @@ body {
 /* Add recipe button */
 .add-ingredient-button {
     box-sizing: border-box;
+    margin-left: auto;
+    margin-bottom: 10px;
     background-color: #007bff;
     color: white;
     border: none;
@@ -105,7 +107,10 @@ body {
     font-weight: 500;
     transition: background-color 0.3s ease;
     width: auto; 
-    display: inline-block; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
 }
 
 .add-ingredient-button:hover {

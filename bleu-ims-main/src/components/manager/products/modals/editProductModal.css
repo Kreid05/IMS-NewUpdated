@@ -74,7 +74,7 @@
 .editProduct-submit-button {
     min-width: 100px;
     padding: 10px 20px;
-    background-color: #4B929D;
+    background-color: #007bff;
     color: white;
     font-weight: bold;
     border: none;
@@ -84,7 +84,7 @@
 }
 
 .editProduct-submit-button:hover {
-    background-color: #3a737c;
+    background-color: #0050a5;
 }
 
 .editProduct-cancel-button {

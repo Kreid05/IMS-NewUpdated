@@ -59,12 +59,16 @@
 }
 
 .editSupply-save-button {
-    background-color: #4B929D;
+    background-color: #007bff;
     color: #fff;
     padding: 8px 14px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
+}
+
+.editSupply-save-button:hover {
+    background-color: #0050a5;
 }
 
 .editSupply-cancel-button {
@@ -74,4 +78,8 @@
     border: none;
     border-radius: 6px;
     cursor: pointer;
+}
+
+.editSupply-cancel-button:hover {
+    background-color: #b3b3b3;
 }

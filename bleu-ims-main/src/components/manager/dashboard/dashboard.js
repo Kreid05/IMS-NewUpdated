@@ -286,7 +286,7 @@ const Dashboard = () => {
   return (
     <div className="dashboard">
       <Sidebar />
-      <main className="dashboard-main">
+      <main className="roles">
         <Header pageTitle="Dashboard" />
         <div className="dashboard-contents">
           {/* Hello Section */}

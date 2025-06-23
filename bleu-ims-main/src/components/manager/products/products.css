@@ -246,3 +246,16 @@ body {
 .action-buttons button:hover {
     opacity: 0.85;
 }
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px; /* Adjust height as needed */
+}
+
+.loading-animation {
+  width: 150px; /* Adjust size as needed */
+  height: 150px;
+  object-fit: contain;
+}

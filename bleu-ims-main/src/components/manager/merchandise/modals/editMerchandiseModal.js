@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./editMerchandiseModal.css";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const API_BASE_URL = "http://127.0.0.1:8004";
 const getAuthToken = () => localStorage.getItem("authToken");
@@ -30,7 +32,7 @@ function EditMerchandiseModal({ merchandise, onClose, onUpdate }) {
 
         const token = getAuthToken();
         if (!token) {
-            alert("Authentication token not found.");
+            toast.error("Authentication token not found.");
             return;
         }
 
@@ -59,10 +61,11 @@ function EditMerchandiseModal({ merchandise, onClose, onUpdate }) {
 
             const updatedData = await response.json();
             onUpdate(updatedData);
+            toast.success("Merchandise updated successfully!");
             onClose();
         } catch (error) {
             console.error("Error updating item:", error);
-            alert("Error updating item.");
+            toast.error("Error updating item.");
         } finally {
             setIsLoading(false);
         }

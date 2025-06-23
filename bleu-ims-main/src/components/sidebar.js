@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar';
+import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import './sidebar.css';
 import { Link } from 'react-router-dom';
 import logo from '../assets/logo.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBars, faHome, faUtensils, faUserFriends,
-  faBox, faCarrot, faTruck, faTshirt
+  faBox, faCarrot, faTruck, faTshirt,
+  faRecycle, faBoxesStacked, faFileAlt
 } from '@fortawesome/free-solid-svg-icons';
+
 
 function SidebarComponent() {
   const [collapsed, setCollapsed] = useState(false);
@@ -69,6 +71,42 @@ function SidebarComponent() {
               active={location.pathname === '/manager/merchandise'}
             >
               Merchandise
+            </MenuItem>
+          </Menu>
+
+          {!collapsed && <div className="section-title">LOGS</div>}
+          <Menu>
+            <MenuItem
+              icon={<FontAwesomeIcon icon={faRecycle} />}
+              component={<Link to="/manager/wasteManagement" />}
+              active={location.pathname === '/manager/wasteManagement'}
+            >
+              Waste Management
+            </MenuItem>
+          </Menu>
+
+          {!collapsed && <div className="section-title">RESTOCK LOGS</div>}
+          <Menu>
+            <MenuItem
+              icon={<FontAwesomeIcon icon={faFileAlt} />}
+              component={<Link to="/manager/wasteManagement" />}
+              active={location.pathname === '/manager/wasteManagement'}
+            >
+              Ingredients Logs
+            </MenuItem>
+            <MenuItem
+              icon={<FontAwesomeIcon icon={faFileAlt} />}
+              component={<Link to="/manager/wasteManagement" />}
+              active={location.pathname === '/manager/wasteManagement'}
+            >
+              Supplies Logs
+            </MenuItem>
+            <MenuItem
+              icon={<FontAwesomeIcon icon={faFileAlt} />}
+              component={<Link to="/manager/wasteManagement" />}
+              active={location.pathname === '/manager/wasteManagement'}
+            >
+              Merchandise Logs
             </MenuItem>
           </Menu>
         </div>

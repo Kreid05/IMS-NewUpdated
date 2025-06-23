@@ -111,6 +111,11 @@ function AddProductModal({ onClose, onSubmit }) {
             newErrors.productSize = "Product size is required for this product type.";
         }
 
+        // Validate productImageFile as required
+        if (!productImageFile) {
+            newErrors.productImageFile = "Product image is required";
+        }
+
         if (Object.keys(newErrors).length > 0) {
             setErrors(prev => ({...prev, ...newErrors}));
             setIsLoading(false);
@@ -135,9 +140,7 @@ function AddProductModal({ onClose, onSubmit }) {
             formData.append("ProductSize", productSize.trim());
         }
         
-        if (productImageFile) {
-            formData.append("ProductImageFile", productImageFile);
-        }
+        formData.append("ProductImageFile", productImageFile);
 
         try {
             const response = await fetch(API_PRODUCTS_URL, {
@@ -272,7 +275,7 @@ function AddProductModal({ onClose, onSubmit }) {
                     )}
 
                     <label>
-                        Image (Optional)
+                        Image <span className="addProduct-required-asterisk">*</span>
                         <input
                             type="file"
                             accept="image/*"
