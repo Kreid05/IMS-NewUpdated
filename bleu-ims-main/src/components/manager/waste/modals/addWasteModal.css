@@ -1,0 +1,126 @@
+.addWaste-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.addWaste-modal-content {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    width: 500px;
+    position: relative;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+.addWaste-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.addWaste-modal-header h3 {
+    margin: 0;
+    color: #4B929D;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.addWaste-modal-close-button {
+    font-size: 24px;
+    cursor: pointer;
+    color: #444;
+}
+
+.addWaste-modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.addWaste-modal-content label {
+    display: block;
+    margin-top: 10px;
+    font-weight: 500;
+    color: #555;
+}
+
+.addWaste-modal-content input[type="text"],
+.addWaste-modal-content input[type="number"],
+.addWaste-modal-content input[type="date"],
+.addWaste-modal-content select,
+.addWaste-modal-content textarea {
+    width: 100%;
+    padding: 8px 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.addWaste-modal-content textarea {
+    resize: vertical;
+    min-height: 60px;
+}
+
+.addWaste-modal-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.addWaste-modal-buttons button {
+    width: 30%;
+    padding: 10px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.addWaste-modal-buttons button[type="addWaste-submit-button"] {
+    background-color: #007bff;
+    color: white;
+}
+
+.addWaste-modal-buttons button[type="addWaste-submit-button"]:hover {
+    background-color: #0050a5;
+}
+
+.addWaste-form-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.addWaste-form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.addWaste-form-group label {
+    margin-bottom: 5px;
+}
+
+.addWaste-required-asterisk {
+    color: red;
+}
+
+.addWaste-error-message {
+    color: red;
+    font-size: 0.8rem;
+    margin-top: 4px;
+}

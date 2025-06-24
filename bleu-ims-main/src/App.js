@@ -7,6 +7,10 @@ import Products from './components/manager/products/products';
 import Ingredients from './components/manager/ingredients/ingredients';
 import Supplies from './components/manager/supplies/supplies';
 import Merchandise from './components/manager/merchandise/merchandise';
+import Waste from './components/manager/waste/waste';
+import IngredientsLogs from './components/manager/restockLogs/ingredientsLogs/ingredientsLogs';
+import MerchandiseLogs from './components/manager/restockLogs/merchandiseLogs/merchandiseLogs';
+import SuppliesLogs from './components/manager/restockLogs/suppliesLogs/suppliesLogs';
 
 function App() {
   return (
@@ -19,6 +23,10 @@ function App() {
         <Route path="/manager/ingredients" element={<Ingredients />} />
         <Route path="/manager/supplies" element={<Supplies />} />
         <Route path="/manager/merchandise" element={<Merchandise />} />
+        <Route path="/manager/wasteManagement" element={<Waste />} />
+        <Route path="/manager/ingredientsLogs" element={<IngredientsLogs />} />
+        <Route path="/manager/suppliesLogs" element={<SuppliesLogs />} />
+        <Route path="/manager/merchandiseLogs" element={<MerchandiseLogs />} />
       </Routes>
     </Router>
   );

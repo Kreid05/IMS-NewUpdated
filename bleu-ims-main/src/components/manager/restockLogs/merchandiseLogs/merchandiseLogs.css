@@ -1,0 +1,125 @@
+.merchandise-logs {
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+}
+
+.roles {
+    flex: 1;
+    padding-right: 60px;
+    padding-top: 20px;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+
+.merchandise-logs-header {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background-color: #eaf6f8;
+}
+
+.merchandise-logs-bottom-row {
+    display: flex;
+    gap: 20px;
+    padding-bottom: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.merchandise-logs-search-box {
+    flex-grow: 1;
+    max-width: 1000px;
+    padding: 12px 18px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
+    outline: none;
+    background-color: white;
+    background-image: url('https://cdn-icons-png.flaticon.com/512/622/622669.png');
+    background-size: 16px;
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 40px;
+    color: #333;
+}
+
+.sort-merchandise-logs-container {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    gap: 8px;
+}
+
+.sort-merchandise-logs-container label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+.sort-merchandise-logs-select {
+    width: 150px;
+    padding: 10px 12px 10px 12px;
+    padding-right: 24px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: white;
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%23333" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 16px;
+}
+
+.add-merchandise-logs-button {
+    box-sizing: border-box;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.add-merchandise-logs-button:hover {
+    background-color: #0050a5;
+}
+
+.status-available {
+  color: #155724; /* Dark green text */
+  background-color: #d4edda; /* Light green background */
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+  display: inline-block;
+  text-align: center;
+  min-width: 90px;
+}
+
+.status-low-stock {
+  color: #856404; /* Dark yellow text */
+  background-color: #fff3cd; /* Light yellow background */
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+  display: inline-block;
+  text-align: center;
+  min-width: 90px;
+}
+
+.status-not-available {
+  color: #721c24; /* Dark red text */
+  background-color: #f8d7da; /* Light red background */
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+  display: inline-block;
+  text-align: center;
+  min-width: 90px;
+}

@@ -1,0 +1,108 @@
+.addSuppliesLogs-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.addSuppliesLogs-modal-content {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    width: 500px;
+    position: relative;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+.addSuppliesLogs-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.addSuppliesLogs-modal-header h3 {
+    margin: 0;
+    color: #4B929D;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.addSuppliesLogs-modal-content input[type="text"],
+.addSuppliesLogs-modal-content input[type="number"],
+.addSuppliesLogs-modal-content input[type="date"],
+.addSuppliesLogs-modal-content select,
+.addSuppliesLogs-modal-content textarea {
+    width: 100%;
+    padding: 8px 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.addSuppliesLogs-modal-close-button {
+    font-size: 24px;
+    cursor: pointer;
+    color: #444;
+}
+
+.addSuppliesLogs-form-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 15px;
+}
+
+.addSuppliesLogs-form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.addSuppliesLogs-form-group label {
+    display: block;
+    margin-top: 10px;
+    font-weight: 500;
+    color: #555;
+}
+
+.addSuppliesLogs-required-asterisk {
+    color: red;
+}
+
+.addSuppliesLogs-error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 3px;
+}
+
+.addSuppliesLogs-modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.addSuppliesLogs-modal-buttons button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.addSuppliesLogs-modal-buttons button:hover {
+    background-color: #0056b3;
+}
+
+.error {
+    border: 1px solid red;
+}

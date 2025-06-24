@@ -81,7 +81,7 @@ function SidebarComponent() {
               component={<Link to="/manager/wasteManagement" />}
               active={location.pathname === '/manager/wasteManagement'}
             >
-              Waste Management
+              Wastage Records
             </MenuItem>
           </Menu>
 
@@ -89,22 +89,22 @@ function SidebarComponent() {
           <Menu>
             <MenuItem
               icon={<FontAwesomeIcon icon={faFileAlt} />}
-              component={<Link to="/manager/wasteManagement" />}
-              active={location.pathname === '/manager/wasteManagement'}
+              component={<Link to="/manager/ingredientsLogs" />}
+              active={location.pathname === '/manager/ingredientsLogs'}
             >
               Ingredients Logs
             </MenuItem>
             <MenuItem
               icon={<FontAwesomeIcon icon={faFileAlt} />}
-              component={<Link to="/manager/wasteManagement" />}
-              active={location.pathname === '/manager/wasteManagement'}
+              component={<Link to="/manager/suppliesLogs" />}
+              active={location.pathname === '/manager/suppliesLogs'}
             >
               Supplies Logs
             </MenuItem>
             <MenuItem
               icon={<FontAwesomeIcon icon={faFileAlt} />}
-              component={<Link to="/manager/wasteManagement" />}
-              active={location.pathname === '/manager/wasteManagement'}
+              component={<Link to="/manager/merchandiseLogs" />}
+              active={location.pathname === '/manager/merchandiseLogs'}
             >
               Merchandise Logs
             </MenuItem>
