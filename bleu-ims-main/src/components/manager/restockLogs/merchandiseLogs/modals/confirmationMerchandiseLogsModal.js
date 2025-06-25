@@ -13,7 +13,6 @@ function ConfirmationMerchandiseLogsModal({ visible, onConfirm, onCancel, formDa
                 <div className="confirmation-content">
                     <p>Please confirm the following merchandise log details before saving:</p>
                     <ul>
-                        <li><strong>Merchandise:</strong> {formData.merchandise}</li>
                         <li><strong>Quantity:</strong> {formData.quantity}</li>
                         <li><strong>Unit:</strong> {formData.unit}</li>
                         <li><strong>Batch Date:</strong> {formData.batchDate}</li>

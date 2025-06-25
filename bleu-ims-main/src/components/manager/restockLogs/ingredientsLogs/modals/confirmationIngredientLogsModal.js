@@ -13,7 +13,6 @@ function ConfirmationIngredientLogsModal({ visible, onConfirm, onCancel, formDat
                 <div className="confirmation-content">
                     <p>Please confirm the following ingredient log details before saving:</p>
                     <ul>
-                        <li><strong>Ingredient:</strong> {formData.ingredient}</li>
                         <li><strong>Quantity:</strong> {formData.quantity}</li>
                         <li><strong>Unit:</strong> {formData.unit}</li>
                         <li><strong>Batch Date:</strong> {formData.batchDate}</li>

@@ -171,8 +171,8 @@
 }
 
 .recipe-edit-button {
-  background-color: #007bff;
-  color: white;
+  background-color: white;
+  color: #4B929D;
   border: none;
   border-radius: 8px;
   padding: 8px 16px;
@@ -185,13 +185,13 @@
 }
 
 .recipe-edit-button:hover {
-  background-color: #0050a5;
+  background-color: #f0f0f0;
   transform: scale(1.05);
 }
 
 .recipe-delete-button {
-  background-color: #dc3545;
-  color: white;
+  background-color: white;
+  color: #4B929D;
   border: none;
   border-radius: 8px;
   padding: 8px 16px;
@@ -203,6 +203,6 @@
 }
 
 .recipe-delete-button:hover {
-  background-color: #c82333;
+  background-color: #f0f0f0;
   transform: scale(1.05);
 }

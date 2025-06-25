@@ -5,7 +5,6 @@ import ConfirmationSuppliesLogsModal from "./confirmationSuppliesLogsModal";
 
 function AddSuppliesLogsModal({ onClose, onSubmit, initialFormData }) {
     const emptyFormData = {
-        supplies: "",
         quantity: "",
         unit: "",
         batchDate: "",
@@ -30,7 +29,6 @@ function AddSuppliesLogsModal({ onClose, onSubmit, initialFormData }) {
 
     const validate = () => {
         const newErrors = {};
-        if (!formData.supplies) newErrors.supplies = "supplies is required";
         if (!formData.quantity) newErrors.quantity = "Quantity is required";
         if (!formData.unit) newErrors.unit = "Unit is required";
         if (!formData.batchDate) newErrors.batchDate = "Batch Date is required";
@@ -52,11 +50,13 @@ function AddSuppliesLogsModal({ onClose, onSubmit, initialFormData }) {
     const handleConfirm = () => {
         // Derive status based on quantity
         const quantityValue = Number(formData.quantity);
-        let status = "Not Available";
+        let status = "Available";
         if (quantityValue > 10) {
             status = "Available";
-        } else if (quantityValue > 0) {
-            status = "Low Stock";
+        } else if (quantityValue === 0) {
+            status = "Used";
+        } else if (quantityValue > 0 && quantityValue <= 10) {
+            status = "Used";
         }
         const formDataWithStatus = { ...formData, status };
         onSubmit(formDataWithStatus);
@@ -81,20 +81,6 @@ function AddSuppliesLogsModal({ onClose, onSubmit, initialFormData }) {
                             <div className="addSuppliesLogs-form-row">
                                 <div className="addSuppliesLogs-form-group">
                                     <label>
-                                        Supplies: <span className="addSuppliesLogs-required-asterisk">*</span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        name="supplies"
-                                        value={formData.supplies}
-                                        onChange={handleChange}
-                                        onFocus={() => handleFocus("supplies")}
-                                        className={errors.supplies ? "error" : ""}
-                                    />
-                                    {errors.supplies && <p className="addSuppliesLogs-error-message">{errors.supplies}</p>}
-                                </div>
-                                <div className="addSuppliesLogs-form-group">
-                                    <label>
                                         Quantity: <span className="addSuppliesLogs-required-asterisk">*</span>
                                     </label>
                                     <input
@@ -107,9 +93,6 @@ function AddSuppliesLogsModal({ onClose, onSubmit, initialFormData }) {
                                     />
                                     {errors.quantity && <p className="addSuppliesLogs-error-message">{errors.quantity}</p>}
                                 </div>
-                            </div>
-
-                            <div className="addSuppliesLogs-form-row">
                                 <div className="addSuppliesLogs-form-group">
                                     <label>
                                         Unit: <span className="addSuppliesLogs-required-asterisk">*</span>
@@ -128,6 +111,9 @@ function AddSuppliesLogsModal({ onClose, onSubmit, initialFormData }) {
                                     </select>
                                     {errors.unit && <p className="addSuppliesLogs-error-message">{errors.unit}</p>}
                                 </div>
+                            </div>
+
+                            <div className="addSuppliesLogs-form-row">
                                 <div className="addSuppliesLogs-form-group">
                                     <label>
                                         Batch Date: <span className="addSuppliesLogs-required-asterisk">*</span>
@@ -142,9 +128,6 @@ function AddSuppliesLogsModal({ onClose, onSubmit, initialFormData }) {
                                     />
                                     {errors.batchDate && <p className="addSuppliesLogs-error-message">{errors.batchDate}</p>}
                                 </div>
-                            </div>
-
-                            <div className="addSuppliesLogs-form-row">
                                 <div className="addSuppliesLogs-form-group">
                                     <label>
                                         Restock Date: <span className="addSuppliesLogs-required-asterisk">*</span>
@@ -159,6 +142,9 @@ function AddSuppliesLogsModal({ onClose, onSubmit, initialFormData }) {
                                     />
                                     {errors.restockDate && <p className="addSuppliesLogs-error-message">{errors.restockDate}</p>}
                                 </div>
+                            </div>
+
+                            <div className="addSuppliesLogs-form-row">
                                 <div className="addSuppliesLogs-form-group">
                                     <label>
                                         Logged By: <span className="addSuppliesLogs-required-asterisk">*</span>

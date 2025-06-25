@@ -15,6 +15,7 @@ const sampleIngredientRecords = [
         Unit: "kg",
         BatchDate: "2024-05-20",
         RestockDate: "2024-06-01",
+        ExpirationDate: "2024-06-15",
         LoggedBy: "John Doe",
         Status: "Available",
         Notes: "Fresh batch"
@@ -26,8 +27,9 @@ const sampleIngredientRecords = [
         Unit: "kg",
         BatchDate: "2024-05-22",
         RestockDate: "2024-06-03",
+        ExpirationDate: "2024-06-18",
         LoggedBy: "Jane Smith",
-        Status: "Low Stock",
+        Status: "Used",
         Notes: "Awaiting quality check"
     }
 ];
@@ -90,11 +92,12 @@ function IngredientsLogs() {
             ...prevRecords,
             {
                 id: prevRecords.length > 0 ? prevRecords[prevRecords.length - 1].id + 1 : 1,
-                Ingredient: formData.ingredient,
+                Ingredient: "",
                 Quantity: Number(formData.quantity),
                 Unit: formData.unit,
                 BatchDate: formData.batchDate,
                 RestockDate: formData.restockDate,
+                ExpirationDate: formData.expirationDate,
                 LoggedBy: formData.loggedBy,
                 Status: capitalizeWords(formData.status),
                 Notes: formData.notes || ""
@@ -135,30 +138,31 @@ function IngredientsLogs() {
                 </div>
                 <div className="ingredients-logs-content">
 
-                    <DataTable
+<DataTable
                         columns={[
                             { name: "Ingredient", selector: row => row.Ingredient, sortable: true, width: "10%" },
-                            { name: "Quantity", selector: row => row.Quantity, width: "10%", center: true },
+                            { name: "Quantity", selector: row => row.Quantity, width: "8%", center: true },
                             { name: "Unit", selector: row => row.Unit, width: "8%", center: true },
-                            { name: "Batch Date", selector: row => row.BatchDate, width: "13%", center: true },
-                            { name: "Restock Date", selector: row => row.RestockDate, width: "13%", center: true },
-                            { name: "Logged By", selector: row => row.LoggedBy, width: "13%", center: true },
+                            { name: "Batch Date", selector: row => row.BatchDate, width: "12%", center: true },
+                            { name: "Restock Date", selector: row => row.RestockDate, width: "12%", center: true },
+                            { name: "Expiration Date", selector: row => row.ExpirationDate, width: "12%", center: true },
+                            { name: "Logged By", selector: row => row.LoggedBy, width: "10%", center: true },
                             { 
                             name: "Status", 
                             selector: row => row.Status, 
-                            width: "10%", 
+                            width: "8%", 
                             center: true,
                             cell: (row) => {
                                 let className = "";
                                 if (row.Status === "Available") className = "status-available";
-                                else if (row.Status === "Low Stock") className = "status-low-stock";
-                                else if (row.Status === "Not Available") className = "status-not-available";
+                                else if (row.Status === "Used") className = "status-used";
+                                else if (row.Status === "Expired") className = "status-expired";
                                 else className = ""; // fallback style if needed
 
                                 return <span className={className}>{row.Status}</span>;
                             }
                             },
-                            { name: "Notes", selector: row => row.Notes, width: "23%", center: true },
+                            { name: "Notes", selector: row => row.Notes, width: "20%", center: true },
                         ]}
                         data={filteredSortedIngredients}
                         striped

@@ -27,7 +27,7 @@ const sampleMerchandiseRecords = [
         BatchDate: "2024-05-22",
         RestockDate: "2024-06-03",
         LoggedBy: "Jane Smith",
-        Status: "Low Stock",
+        Status: "Used",
         Notes: "Super New Batch"
     }
 ];
@@ -90,7 +90,7 @@ function MerchandiseLogs() {
             ...prevRecords,
             {
                 id: prevRecords.length > 0 ? prevRecords[prevRecords.length - 1].id + 1 : 1,
-                Merchandise: formData.merchandise,
+                Merchandise: "",
                 Quantity: Number(formData.quantity),
                 Unit: formData.unit,
                 BatchDate: formData.batchDate,
@@ -151,8 +151,7 @@ function MerchandiseLogs() {
                             cell: (row) => {
                                 let className = "";
                                 if (row.Status === "Available") className = "status-available";
-                                else if (row.Status === "Low Stock") className = "status-low-stock";
-                                else if (row.Status === "Not Available") className = "status-not-available";
+                                else if (row.Status === "Used") className = "status-used";
                                 else className = ""; // fallback style if needed
 
                                 return <span className={className}>{row.Status}</span>;

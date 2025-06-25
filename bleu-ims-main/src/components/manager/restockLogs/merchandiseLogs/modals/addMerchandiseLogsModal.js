@@ -5,7 +5,6 @@ import ConfirmationMerchandiseLogsModal from "./confirmationMerchandiseLogsModal
 
 function AddMerchandiseLogsModal({ onClose, onSubmit, initialFormData }) {
     const emptyFormData = {
-        merchandise: "",
         quantity: "",
         unit: "",
         batchDate: "",
@@ -30,7 +29,6 @@ function AddMerchandiseLogsModal({ onClose, onSubmit, initialFormData }) {
 
     const validate = () => {
         const newErrors = {};
-        if (!formData.merchandise) newErrors.merchandise = "Merchandise is required";
         if (!formData.quantity) newErrors.quantity = "Quantity is required";
         if (!formData.unit) newErrors.unit = "Unit is required";
         if (!formData.batchDate) newErrors.batchDate = "Batch Date is required";
@@ -52,11 +50,13 @@ function AddMerchandiseLogsModal({ onClose, onSubmit, initialFormData }) {
     const handleConfirm = () => {
         // Derive status based on quantity
         const quantityValue = Number(formData.quantity);
-        let status = "Not Available";
+        let status = "Available";
         if (quantityValue > 10) {
             status = "Available";
-        } else if (quantityValue > 0) {
-            status = "Low Stock";
+        } else if (quantityValue === 0) {
+            status = "Used";
+        } else if (quantityValue > 0 && quantityValue <= 10) {
+            status = "Used";
         }
         const formDataWithStatus = { ...formData, status };
         onSubmit(formDataWithStatus);
@@ -81,20 +81,6 @@ function AddMerchandiseLogsModal({ onClose, onSubmit, initialFormData }) {
                             <div className="addMerchandiseLogs-form-row">
                                 <div className="addMerchandiseLogs-form-group">
                                     <label>
-                                        Merchandise: <span className="addMerchandiseLogs-required-asterisk">*</span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        name="merchandise"
-                                        value={formData.merchandise}
-                                        onChange={handleChange}
-                                        onFocus={() => handleFocus("merchandise")}
-                                        className={errors.merchandise ? "error" : ""}
-                                    />
-                                    {errors.merchandise && <p className="addMerchandiseLogs-error-message">{errors.merchandise}</p>}
-                                </div>
-                                <div className="addMerchandiseLogs-form-group">
-                                    <label>
                                         Quantity: <span className="addMerchandiseLogs-required-asterisk">*</span>
                                     </label>
                                     <input
@@ -107,9 +93,6 @@ function AddMerchandiseLogsModal({ onClose, onSubmit, initialFormData }) {
                                     />
                                     {errors.quantity && <p className="addMerchandiseLogs-error-message">{errors.quantity}</p>}
                                 </div>
-                            </div>
-
-                            <div className="addMerchandiseLogs-form-row">
                                 <div className="addMerchandiseLogs-form-group">
                                     <label>
                                         Unit: <span className="addMerchandiseLogs-required-asterisk">*</span>
@@ -128,6 +111,9 @@ function AddMerchandiseLogsModal({ onClose, onSubmit, initialFormData }) {
                                     </select>
                                     {errors.unit && <p className="addMerchandiseLogs-error-message">{errors.unit}</p>}
                                 </div>
+                            </div>
+
+                            <div className="addMerchandiseLogs-form-row">
                                 <div className="addMerchandiseLogs-form-group">
                                     <label>
                                         Batch Date: <span className="addMerchandiseLogs-required-asterisk">*</span>
@@ -142,9 +128,6 @@ function AddMerchandiseLogsModal({ onClose, onSubmit, initialFormData }) {
                                     />
                                     {errors.batchDate && <p className="addMerchandiseLogs-error-message">{errors.batchDate}</p>}
                                 </div>
-                            </div>
-
-                            <div className="addMerchandiseLogs-form-row">
                                 <div className="addMerchandiseLogs-form-group">
                                     <label>
                                         Restock Date: <span className="addMerchandiseLogs-required-asterisk">*</span>
@@ -159,6 +142,9 @@ function AddMerchandiseLogsModal({ onClose, onSubmit, initialFormData }) {
                                     />
                                     {errors.restockDate && <p className="addMerchandiseLogs-error-message">{errors.restockDate}</p>}
                                 </div>
+                            </div>
+
+                            <div className="addMerchandiseLogs-form-row">
                                 <div className="addMerchandiseLogs-form-group">
                                     <label>
                                         Logged By: <span className="addMerchandiseLogs-required-asterisk">*</span>

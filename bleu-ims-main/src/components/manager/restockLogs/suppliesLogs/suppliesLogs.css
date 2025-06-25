@@ -102,20 +102,9 @@
   min-width: 90px;
 }
 
-.status-low-stock {
+.status-used {
   color: #856404; /* Dark yellow text */
   background-color: #fff3cd; /* Light yellow background */
-  padding: 5px 10px;
-  border-radius: 12px;
-  font-weight: 600;
-  display: inline-block;
-  text-align: center;
-  min-width: 90px;
-}
-
-.status-not-available {
-  color: #721c24; /* Dark red text */
-  background-color: #f8d7da; /* Light red background */
   padding: 5px 10px;
   border-radius: 12px;
   font-weight: 600;

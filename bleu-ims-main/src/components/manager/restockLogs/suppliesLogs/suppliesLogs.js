@@ -27,7 +27,7 @@ const sampleSuppliesRecords = [
         BatchDate: "2024-05-22",
         RestockDate: "2024-06-03",
         LoggedBy: "Mark Regie Magtangob",
-        Status: "Low Stock",
+        Status: "Used",
         Notes: "Awaiting quality check"
     },
     {
@@ -38,7 +38,7 @@ const sampleSuppliesRecords = [
         BatchDate: "2024-05-22",
         RestockDate: "2024-06-03",
         LoggedBy: "Jesalle Villegas",
-        Status: "Not Available",
+        Status: "Used",
         Notes: "lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
     }
 ];
@@ -101,7 +101,7 @@ function SuppliesLogs() {
             ...prevRecords,
             {
                 id: prevRecords.length > 0 ? prevRecords[prevRecords.length - 1].id + 1 : 1,
-                Supplies: formData.supplies,
+                Supplies: "",
                 Quantity: Number(formData.quantity),
                 Unit: formData.unit,
                 BatchDate: formData.batchDate,
@@ -162,8 +162,7 @@ function SuppliesLogs() {
                             cell: (row) => {
                                 let className = "";
                                 if (row.Status === "Available") className = "status-available";
-                                else if (row.Status === "Low Stock") className = "status-low-stock";
-                                else if (row.Status === "Not Available") className = "status-not-available";
+                                else if (row.Status === "Used") className = "status-used";
                                 else className = ""; // fallback style if needed
 
                                 return <span className={className}>{row.Status}</span>;

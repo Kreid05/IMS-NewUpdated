@@ -5,11 +5,11 @@ import ConfirmationIngredientLogsModal from "./confirmationIngredientLogsModal";
 
 function AddIngredientLogsModal({ onClose, onSubmit, initialFormData }) {
     const emptyFormData = {
-        ingredient: "",
         quantity: "",
         unit: "",
         batchDate: "",
         restockDate: "",
+        expirationDate: "",
         loggedBy: "",
         notes: ""
     };
@@ -30,11 +30,11 @@ function AddIngredientLogsModal({ onClose, onSubmit, initialFormData }) {
 
     const validate = () => {
         const newErrors = {};
-        if (!formData.ingredient) newErrors.ingredient = "Ingredient is required";
         if (!formData.quantity) newErrors.quantity = "Quantity is required";
         if (!formData.unit) newErrors.unit = "Unit is required";
         if (!formData.batchDate) newErrors.batchDate = "Batch Date is required";
         if (!formData.restockDate) newErrors.restockDate = "Restock Date is required";
+        if (!formData.expirationDate) newErrors.expirationDate = "Expiration Date is required";
         if (!formData.loggedBy) newErrors.loggedBy = "Logged By is required";
         return newErrors;
     };
@@ -50,14 +50,22 @@ function AddIngredientLogsModal({ onClose, onSubmit, initialFormData }) {
     };
 
     const handleConfirm = () => {
-        // Derive status based on quantity
+        // Derive status based on quantity and expirationDate
         const quantityValue = Number(formData.quantity);
-        let status = "Not Available";
-        if (quantityValue > 10) {
+        const expirationDate = formData.expirationDate ? new Date(formData.expirationDate) : null;
+        const today = new Date();
+        let status = "Available";
+
+        if (expirationDate && expirationDate < today) {
+            status = "Expired";
+        } else if (quantityValue === 0) {
+            status = "Used";
+        } else if (quantityValue > 0 && quantityValue <= 10) {
+            status = "Used";
+        } else if (quantityValue > 10) {
             status = "Available";
-        } else if (quantityValue > 0) {
-            status = "Low Stock";
         }
+
         const formDataWithStatus = { ...formData, status };
         onSubmit(formDataWithStatus);
         setShowConfirmation(false);
@@ -81,20 +89,6 @@ function AddIngredientLogsModal({ onClose, onSubmit, initialFormData }) {
                             <div className="addIngredientLogs-form-row">
                                 <div className="addIngredientLogs-form-group">
                                     <label>
-                                        Ingredient: <span className="addIngredientLogs-required-asterisk">*</span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        name="ingredient"
-                                        value={formData.ingredient}
-                                        onChange={handleChange}
-                                        onFocus={() => handleFocus("ingredient")}
-                                        className={errors.ingredient ? "error" : ""}
-                                    />
-                                    {errors.ingredient && <p className="addIngredientLogs-error-message">{errors.ingredient}</p>}
-                                </div>
-                                <div className="addIngredientLogs-form-group">
-                                    <label>
                                         Quantity: <span className="addIngredientLogs-required-asterisk">*</span>
                                     </label>
                                     <input
@@ -107,9 +101,6 @@ function AddIngredientLogsModal({ onClose, onSubmit, initialFormData }) {
                                     />
                                     {errors.quantity && <p className="addIngredientLogs-error-message">{errors.quantity}</p>}
                                 </div>
-                            </div>
-
-                            <div className="addIngredientLogs-form-row">
                                 <div className="addIngredientLogs-form-group">
                                     <label>
                                         Unit: <span className="addIngredientLogs-required-asterisk">*</span>
@@ -129,6 +120,9 @@ function AddIngredientLogsModal({ onClose, onSubmit, initialFormData }) {
                                     </select>
                                     {errors.unit && <p className="addIngredientLogs-error-message">{errors.unit}</p>}
                                 </div>
+                            </div>
+
+                            <div className="addIngredientLogs-form-row">
                                 <div className="addIngredientLogs-form-group">
                                     <label>
                                         Batch Date: <span className="addIngredientLogs-required-asterisk">*</span>
@@ -143,9 +137,6 @@ function AddIngredientLogsModal({ onClose, onSubmit, initialFormData }) {
                                     />
                                     {errors.batchDate && <p className="addIngredientLogs-error-message">{errors.batchDate}</p>}
                                 </div>
-                            </div>
-
-                            <div className="addIngredientLogs-form-row">
                                 <div className="addIngredientLogs-form-group">
                                     <label>
                                         Restock Date: <span className="addIngredientLogs-required-asterisk">*</span>
@@ -159,6 +150,23 @@ function AddIngredientLogsModal({ onClose, onSubmit, initialFormData }) {
                                         className={errors.restockDate ? "error" : ""}
                                     />
                                     {errors.restockDate && <p className="addIngredientLogs-error-message">{errors.restockDate}</p>}
+                                </div>
+                            </div>
+
+                            <div className="addIngredientLogs-form-row">
+                                <div className="addIngredientLogs-form-group">
+                                    <label>
+                                        Expiration Date:
+                                    </label>
+                                    <input
+                                        type="date"
+                                        name="expirationDate"
+                                        value={formData.expirationDate}
+                                        onChange={handleChange}
+                                        onFocus={() => handleFocus("expirationDate")}
+                                        className={errors.expirationDate ? "error" : ""}
+                                    />
+                                    {errors.expirationDate && <p className="addIngredientLogs-error-message">{errors.expirationDate}</p>}
                                 </div>
                                 <div className="addIngredientLogs-form-group">
                                     <label>

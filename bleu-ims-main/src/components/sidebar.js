@@ -40,14 +40,14 @@ function SidebarComponent() {
               component={<Link to="/manager/products" />}
               active={location.pathname === '/manager/products'}
             >
-              Product Management
+              Menu Management
             </MenuItem>
             <MenuItem
               icon={<FontAwesomeIcon icon={faUtensils} />}
               component={<Link to="/manager/recipeManagement" />}
               active={location.pathname === '/manager/recipeManagement'}
             >
-              Recipe Management
+              Product Composition
             </MenuItem>
 
             {!collapsed && <div className="section-title">STOCKS</div>}

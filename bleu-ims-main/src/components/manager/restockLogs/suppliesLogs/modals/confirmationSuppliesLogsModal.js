@@ -13,7 +13,6 @@ function ConfirmationSuppliesLogsModal({ visible, onConfirm, onCancel, formData 
                 <div className="confirmation-content">
                     <p>Please confirm the following supplies log details before saving:</p>
                     <ul>
-                        <li><strong>Supplies:</strong> {formData.supplies}</li>
                         <li><strong>Quantity:</strong> {formData.quantity}</li>
                         <li><strong>Unit:</strong> {formData.unit}</li>
                         <li><strong>Batch Date:</strong> {formData.batchDate}</li>
