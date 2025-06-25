@@ -173,11 +173,10 @@ body {
     align-items: center;
     justify-content: center;
     height: 40px;
-
 }
 
 .action-button.view {
-    background-color: #6c757d; /* Gray */
+    background-color: #476930; /* Green */
 }
 
 .action-button.edit {
@@ -186,6 +185,10 @@ body {
 
 .action-button.delete {
     background-color: #dc3545; /* Red */
+}
+
+.action-button.restock {
+    background-color: #FDB137; /* Supernova */
 }
 
 .action-buttons button:hover {

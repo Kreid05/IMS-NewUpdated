@@ -2,11 +2,12 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from 'react-router-dom';
 import "./ingredients.css";
 import Sidebar from "../../sidebar";
-import { FaChevronDown, FaEye, FaEdit, FaArchive } from "react-icons/fa";
+import { FaRedoAlt, FaEye, FaEdit, FaArchive } from "react-icons/fa";
 import DataTable from "react-data-table-component";
 import AddIngredientModal from './modals/addIngredientModal';
 import EditIngredientModal from './modals/editIngredientModal';
 import ViewIngredientModal from './modals/viewIngredientModal';
+import AddIngredientLogsModal from '../restockLogs/ingredientsLogs/modals/addIngredientLogsModal';
 import Header from "../../header";
 import { jwtDecode } from 'jwt-decode';
 import { toast, ToastContainer } from 'react-toastify';
@@ -32,6 +33,7 @@ function Ingredients() {
     const [showEditIngredientModal, setShowEditIngredientModal] = useState(false);
     const [currentIngredient, setCurrentIngredient] = useState(null);
     const [showViewIngredientModal, setShowViewIngredientModal] = useState(false);
+    const [showAddIngredientLogsModal, setShowAddIngredientLogsModal] = useState(false);
 
     // filtering and sorting data
     const filteredIngredients = ingredients
@@ -167,7 +169,7 @@ function Ingredients() {
 
     const columns = [
         { name: "NO.", selector: (row, index) => index + 1, width: "5%" },
-        { name: "INGREDIENT NAME", selector: (row) => row.IngredientName, sortable: true, width: "20%" },
+        { name: "INGREDIENT NAME", selector: (row) => row.IngredientName, sortable: true, width: "15%" },
         { name: "AMOUNT", selector: (row) => row.Amount, width: "10%", center: true },
         { name: "UNIT", selector: (row) => row.Measurement, width: "10%", center: true },
         { name: "BEST BEFORE DATE", selector: (row) => row.BestBeforeDate, width: "15%", center: true },
@@ -191,6 +193,7 @@ function Ingredients() {
             name: "ACTIONS",
             cell: (row) => (
                 <div className="action-buttons">
+                    <button className="action-button restock" onClick={() => setShowAddIngredientLogsModal(true)}><FaRedoAlt /></button>
                     <button className="action-button view" onClick={() => handleView(row)}><FaEye /></button>
                     <button className="action-button edit" onClick={() => handleEdit(row)}><FaEdit /></button>
                     <button className="action-button delete" onClick={() => handleDelete(row.IngredientID)}><FaArchive /></button>
@@ -198,7 +201,7 @@ function Ingredients() {
             ),
             ignoreRowClick: true,
             allowOverflow: true,
-            width: "15%",
+            width: "20%",
             center: true,
         },
     ];
@@ -312,6 +315,31 @@ function Ingredients() {
                     onUpdate={() => {
                         setCurrentIngredient(null);
                         fetchIngredients();
+                    }}
+                />
+            )}
+            <ToastContainer />
+
+            {showAddIngredientLogsModal && (
+                <AddIngredientLogsModal
+                    onClose={() => setShowAddIngredientLogsModal(false)}
+                    onSubmit={(formData) => {
+                        // Save new restock record to localStorage
+                        const existingRecords = JSON.parse(localStorage.getItem("newIngredientRestockRecords") || "[]");
+                        const newRecord = {
+                            id: Date.now(), // unique id based on timestamp
+                            ingredient: formData.ingredient,
+                            quantity: Number(formData.quantity),
+                            unit: formData.unit,
+                            batchDate: formData.batchDate,
+                            restockDate: formData.restockDate,
+                            loggedBy: formData.loggedBy,
+                            status: formData.status,
+                            notes: formData.notes || ""
+                        };
+                        localStorage.setItem("newIngredientRestockRecords", JSON.stringify([...existingRecords, newRecord]));
+                        setShowAddIngredientLogsModal(false);
+                        toast.success("Ingredient restock record added successfully!");
                     }}
                 />
             )}

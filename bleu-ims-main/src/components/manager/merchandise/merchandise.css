@@ -166,7 +166,7 @@ body {
 }
 
 .action-button.view {
-    background-color: #6c757d;
+    background-color: #476930;
 }
 
 .action-button.edit {
@@ -175,6 +175,10 @@ body {
 
 .action-button.delete {
     background-color: #dc3545;
+}
+
+.action-button.restock {
+    background-color: #FDB137; /* Supernova */
 }
 
 .action-buttons button:hover {

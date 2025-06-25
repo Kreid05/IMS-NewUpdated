@@ -122,11 +122,9 @@ function AddMerchandiseLogsModal({ onClose, onSubmit, initialFormData }) {
                                         className={errors.unit ? "error" : ""}
                                     >
                                         <option value="">Select Unit</option>
-                                        <option value="kg">kg</option>
-                                        <option value="g">g</option>
-                                        <option value="lb">ml</option>
-                                        <option value="oz">l</option>
                                         <option value="pcs">pcs</option>
+                                        <option value="pack">pack</option>
+                                        <option value="box">box</option>
                                     </select>
                                     {errors.unit && <p className="addMerchandiseLogs-error-message">{errors.unit}</p>}
                                 </div>

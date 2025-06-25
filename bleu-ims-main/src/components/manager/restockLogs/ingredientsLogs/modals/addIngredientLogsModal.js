@@ -122,11 +122,10 @@ function AddIngredientLogsModal({ onClose, onSubmit, initialFormData }) {
                                         className={errors.unit ? "error" : ""}
                                     >
                                         <option value="">Select Unit</option>
+                                        <option value="ml">ml</option>
+                                        <option value="l">l</option>
                                         <option value="kg">kg</option>
                                         <option value="g">g</option>
-                                        <option value="lb">ml</option>
-                                        <option value="oz">l</option>
-                                        <option value="pcs">pcs</option>
                                     </select>
                                     {errors.unit && <p className="addIngredientLogs-error-message">{errors.unit}</p>}
                                 </div>

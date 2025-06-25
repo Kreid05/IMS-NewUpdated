@@ -2,11 +2,12 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from 'react-router-dom';
 import "./merchandise.css"; 
 import Sidebar from "../../sidebar";
-import { FaChevronDown, FaEye, FaEdit, FaArchive } from "react-icons/fa";
+import { FaRedoAlt, FaEye, FaEdit, FaArchive } from "react-icons/fa";
 import DataTable from "react-data-table-component";
 import AddMerchandiseModal from './modals/addMerchandiseModal';
 import EditMerchandiseModal from "./modals/editMerchandiseModal";
 import ViewMerchandiseModal from "./modals/viewMerchandiseModal";
+import AddMerchandiseLogsModal from '../restockLogs/merchandiseLogs/modals/addMerchandiseLogsModal';
 import Header from "../../header";
 import { jwtDecode } from 'jwt-decode';
 import { toast, ToastContainer } from 'react-toastify';
@@ -32,6 +33,7 @@ function Merchandise() {
     const [showEditMerchandiseModal, setShowEditMerchandiseModal] = useState(false);
     const [selectedMerchandise, setSelectedMerchandise] = useState(null);
     const [showViewMerchandiseModal, setShowViewMerchandiseModal] = useState(false);
+    const [showAddMerchandiseLogsModal, setShowAddMerchandiseLogsModal] = useState(false);
 
     const currentDate = new Date().toLocaleString("en-US", {
         weekday: "long", year: "numeric", month: "long", day: "numeric",
@@ -189,6 +191,7 @@ function Merchandise() {
             name: "ACTIONS",
             cell: (row) => (
                 <div className="action-buttons">
+                    <button className="action-button restock" onClick={() => setShowAddMerchandiseLogsModal(true)}><FaRedoAlt /></button>
                     <button className="action-button view" onClick={() => handleView(row)}><FaEye /></button>
                     <button className="action-button edit" onClick={() => handleEdit(row)}><FaEdit /></button>
                     <button className="action-button delete" onClick={() => handleDelete(row.MerchandiseID)}><FaArchive /></button>
@@ -314,6 +317,29 @@ function Merchandise() {
                 />
             )}
 
+            {showAddMerchandiseLogsModal && (
+                <AddMerchandiseLogsModal
+                    onClose={() => setShowAddMerchandiseLogsModal(false)}
+                    onSubmit={(formData) => {
+                        // Save new restock record to localStorage
+                        const existingRecords = JSON.parse(localStorage.getItem("newMerchandiseRestockRecords") || "[]");
+                        const newRecord = {
+                            id: Date.now(), // unique id based on timestamp
+                            merchandise: formData.merchandise,
+                            quantity: Number(formData.quantity),
+                            unit: formData.unit,
+                            batchDate: formData.batchDate,
+                            restockDate: formData.restockDate,
+                            loggedBy: formData.loggedBy,
+                            status: formData.status,
+                            notes: formData.notes || ""
+                        };
+                        localStorage.setItem("newMerchandiseRestockRecords", JSON.stringify([...existingRecords, newRecord]));
+                        setShowAddMerchandiseLogsModal(false);
+                        toast.success("Merchandise restock record added successfully!");
+                    }}
+                />
+            )}
             <ToastContainer />
         </div>
     );

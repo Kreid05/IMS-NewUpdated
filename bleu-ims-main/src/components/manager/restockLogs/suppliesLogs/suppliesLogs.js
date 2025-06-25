@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../../../sidebar";
 import Header from "../../../header";
 import DataTable from "react-data-table-component";
@@ -49,6 +49,34 @@ function SuppliesLogs() {
     const [sortOrder, setSortOrder] = useState('desc');
     const [showAddSuppliesModal, setShowAddSuppliesModal] = useState(false);
     const [tempFormData, setTempFormData] = useState(null);
+
+    useEffect(() => {
+        // On mount, read new restock records from localStorage and merge
+        const newRecordsRaw = JSON.parse(localStorage.getItem("newSuppliesRestockRecords") || "[]");
+        if (newRecordsRaw.length > 0) {
+            // Normalize keys to match expected keys in suppliesRecords
+            const newRecords = newRecordsRaw.map(r => ({
+                id: r.id,
+                Supplies: r.supplies || r.supplies || "",
+                Quantity: r.quantity || r.Quantity || 0,
+                Unit: r.unit || r.Unit || "",
+                BatchDate: r.batchDate || r.BatchDate || "",
+                RestockDate: r.restockDate || r.RestockDate || "",
+                LoggedBy: r.loggedBy || r.LoggedBy || "",
+                Status: r.status || r.Status || "",
+                Notes: r.notes || r.Notes || ""
+            }));
+
+            setSuppliesRecords(prevRecords => {
+                // Filter out duplicates by id if any
+                const existingIds = new Set(prevRecords.map(r => r.id));
+                const filteredNewRecords = newRecords.filter(r => !existingIds.has(r.id));
+                return [...prevRecords, ...filteredNewRecords];
+            });
+            // Clear the new records from localStorage
+            localStorage.removeItem("newSuppliesRestockRecords");
+        }
+    }, []);
 
     const filteredSortedSupplies = suppliesRecords
         .filter(item => {
@@ -114,9 +142,6 @@ function SuppliesLogs() {
                                 <option value="asc">Oldest</option>
                             </select>
                         </div>
-                        <button className="add-supplies-logs-button" onClick={() => { setTempFormData(null); setShowAddSuppliesModal(true); }}>
-                            + Add Restock Record
-                        </button>
                     </div>
                 </div>
                 <div className="supplies-logs-content">

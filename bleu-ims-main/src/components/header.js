@@ -18,8 +18,8 @@ const Header = ({ pageTitle }) => {
   const handleLogout = useCallback(() => {
       localStorage.removeItem('authToken');
       localStorage.removeItem('username');
-      navigate('/');
-  }, [navigate]);
+      window.location.href = 'http://localhost:4002';
+  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -93,7 +93,7 @@ const Header = ({ pageTitle }) => {
             <div className="profile-dropdown">
               <ul>
                 <li>Edit Profile</li>
-                <li>Logout</li>
+                <li onClick={handleLogout} style={{ cursor: 'pointer' }}>Logout</li>
               </ul>
             </div>
           )}

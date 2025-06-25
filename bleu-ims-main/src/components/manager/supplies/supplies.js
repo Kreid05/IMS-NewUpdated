@@ -2,11 +2,12 @@ import React, { useState , useEffect, useCallback } from "react";
 import { useNavigate } from 'react-router-dom';
 import "./supplies.css";
 import Sidebar from "../../sidebar";
-import { FaChevronDown, FaEye, FaEdit, FaArchive } from "react-icons/fa";
+import { FaRedoAlt, FaEye, FaEdit, FaArchive } from "react-icons/fa";
 import DataTable from "react-data-table-component";
 import AddSupplyModal from './modals/addSupplyModal';
 import EditSupplyModal from "./modals/editSupplyModal";
 import ViewSupplyModal from "./modals/viewSupplyModal";
+import AddSuppliesLogsModal from '../restockLogs/suppliesLogs/modals/addSuppliesLogsModal';
 import Header from "../../header";
 import { jwtDecode } from 'jwt-decode';
 import { toast, ToastContainer } from 'react-toastify';
@@ -32,6 +33,7 @@ function Supplies() {
     const [showEditSupplyModal, setShowEditSupplyModal] = useState(false);
     const [selectedSupply, setSelectedSupply] = useState(null);
     const [showViewSupplyModal, setShowViewSupplyModal] = useState(false);
+    const [showAddSuppliesLogsModal, setShowAddSuppliesLogsModal] = useState(false);
 
     const currentDate = new Date().toLocaleString("en-US", {
         weekday: "long", year: "numeric", month: "long", day: "numeric",
@@ -98,7 +100,7 @@ function Supplies() {
 
             if (!response.ok) {
                 const errorData = await response.json();
-               throw new Error(`Failed to fetch ingredients: ${response.status} ${errorData}`);
+               throw new Error(`Failed to fetch supplies: ${response.status} ${errorData}`);
             }
 
             const data = await response.json();
@@ -145,7 +147,7 @@ function Supplies() {
 
                             if (!response.ok) {
                                 const errorData = await response.json();
-                                throw new Error(errorData.detail || "Failed to delete ingredient.");
+                                throw new Error(errorData.detail || "Failed to delete supplies.");
                             }
 
                             toast.success("Supply/Material deleted successfully.");
@@ -190,6 +192,7 @@ function Supplies() {
             name: "ACTIONS",
             cell: (row) => (
                 <div className="action-buttons">
+                    <button className="action-button restock" onClick={() => setShowAddSuppliesLogsModal(true)}><FaRedoAlt /></button>
                     <button className="action-button view" onClick={() => handleView(row)}><FaEye /></button>
                     <button className="action-button edit" onClick={() => handleEdit(row)}><FaEdit /></button>
                     <button className="action-button delete" onClick={() => handleDelete(row.MaterialID)}><FaArchive /></button>
@@ -306,6 +309,40 @@ function Supplies() {
                     onUpdate={() => {
                         setSelectedSupply(null);
                         fetchSupplies();
+                    }}
+                />
+            )}
+
+            {showAddSupplyModal && (
+                <AddSupplyModal 
+                    onClose={() => setShowAddSupplyModal(false)} 
+                    onSubmit={(newSupply) => {
+                        setShowAddSupplyModal(false);
+                        fetchSupplies();
+                    }}
+                />
+            )}
+
+            {showAddSuppliesLogsModal && (
+                <AddSuppliesLogsModal
+                    onClose={() => setShowAddSuppliesLogsModal(false)}
+                    onSubmit={(formData) => {
+                        // Save new restock record to localStorage
+                        const existingRecords = JSON.parse(localStorage.getItem("newSuppliesRestockRecords") || "[]");
+                        const newRecord = {
+                            id: Date.now(), // unique id based on timestamp
+                            supplies: formData.supplies,
+                            quantity: Number(formData.quantity),
+                            unit: formData.unit,
+                            batchDate: formData.batchDate,
+                            restockDate: formData.restockDate,
+                            loggedBy: formData.loggedBy,
+                            status: formData.status,
+                            notes: formData.notes || ""
+                        };
+                        localStorage.setItem("newSuppliesRestockRecords", JSON.stringify([...existingRecords, newRecord]));
+                        setShowAddSuppliesLogsModal(false);
+                        toast.success("Supplies restock record added successfully!");
                     }}
                 />
             )}

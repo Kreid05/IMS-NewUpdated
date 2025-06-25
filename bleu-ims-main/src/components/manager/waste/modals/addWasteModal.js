@@ -136,10 +136,10 @@ function AddWasteModal({ onClose, onSubmit, initialFormData }) {
                                 className={errors.Unit ? "error" : ""}
                             >
                                 <option value="">Select Unit</option>
+                                <option value="ml">ml</option>
+                                <option value="l">l</option>
                                 <option value="kg">kg</option>
                                 <option value="g">g</option>
-                                <option value="lb">lb</option>
-                                <option value="oz">oz</option>
                                 <option value="pcs">pcs</option>
                             </select>
                             {errors.Unit && <p className="addWaste-error-message">{errors.Unit}</p>}
