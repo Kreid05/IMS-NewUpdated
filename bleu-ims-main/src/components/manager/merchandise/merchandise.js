@@ -191,10 +191,22 @@ function Merchandise() {
             name: "ACTIONS",
             cell: (row) => (
                 <div className="action-buttons">
-                    <button className="action-button restock" onClick={() => setShowAddMerchandiseLogsModal(true)}><FaRedoAlt /></button>
-                    <button className="action-button view" onClick={() => handleView(row)}><FaEye /></button>
-                    <button className="action-button edit" onClick={() => handleEdit(row)}><FaEdit /></button>
-                    <button className="action-button delete" onClick={() => handleDelete(row.MerchandiseID)}><FaArchive /></button>
+                    <div className="tooltip-container">
+                        <button className="action-button restock" onClick={() => setShowAddMerchandiseLogsModal(true)}><FaRedoAlt /></button>
+                        <span className="tooltip-text">Restock</span>
+                    </div>
+                    <div className="tooltip-container">
+                        <button className="action-button view" onClick={() => handleView(row)}><FaEye /></button>
+                        <span className="tooltip-text">View</span>
+                    </div>
+                    <div className="tooltip-container">
+                        <button className="action-button edit" onClick={() => handleEdit(row)}><FaEdit /></button>
+                        <span className="tooltip-text">Edit</span>
+                    </div>
+                    <div className="tooltip-container">
+                        <button className="action-button delete" onClick={() => handleDelete(row.MerchandiseID)}><FaArchive /></button>
+                        <span className="tooltip-text">Delete</span>
+                    </div>
                 </div>
             ),
             ignoreRowClick: true,

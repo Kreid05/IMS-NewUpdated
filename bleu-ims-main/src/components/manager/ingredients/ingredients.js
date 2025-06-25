@@ -189,21 +189,33 @@ function Ingredients() {
                 return <span className={className}>{row.Status}</span>;
             }
         },
-        {
-            name: "ACTIONS",
-            cell: (row) => (
-                <div className="action-buttons">
-                    <button className="action-button restock" onClick={() => setShowAddIngredientLogsModal(true)}><FaRedoAlt /></button>
-                    <button className="action-button view" onClick={() => handleView(row)}><FaEye /></button>
-                    <button className="action-button edit" onClick={() => handleEdit(row)}><FaEdit /></button>
-                    <button className="action-button delete" onClick={() => handleDelete(row.IngredientID)}><FaArchive /></button>
-                </div>
-            ),
-            ignoreRowClick: true,
-            allowOverflow: true,
-            width: "20%",
-            center: true,
-        },
+                {
+                    name: "ACTIONS",
+                    cell: (row) => (
+                        <div className="action-buttons">
+                            <div className="tooltip-container">
+                                <button className="action-button restock" onClick={() => setShowAddIngredientLogsModal(true)}><FaRedoAlt /></button>
+                                <span className="tooltip-text">Restock</span>
+                            </div>
+                            <div className="tooltip-container">
+                                <button className="action-button view" onClick={() => handleView(row)}><FaEye /></button>
+                                <span className="tooltip-text">View</span>
+                            </div>
+                            <div className="tooltip-container">
+                                <button className="action-button edit" onClick={() => handleEdit(row)}><FaEdit /></button>
+                                <span className="tooltip-text">Edit</span>
+                            </div>
+                            <div className="tooltip-container">
+                                <button className="action-button delete" onClick={() => handleDelete(row.IngredientID)}><FaArchive /></button>
+                                <span className="tooltip-text">Delete</span>
+                            </div>
+                        </div>
+                    ),
+                    ignoreRowClick: true,
+                    allowOverflow: true,
+                    width: "20%",
+                    center: true,
+                },
     ];
 
     return (

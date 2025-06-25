@@ -192,9 +192,15 @@ const ProductTypeModal = ({ onClose }) => {
         {
             name: "Actions",
             cell: (row) => (
-                <div className="productType-action-buttons">
-                    <button className="productType-action-button edit" title="Edit Product" onClick={() => handleEdit(row)}><FaEdit /></button>
-                    <button className="productType-action-button delete" title="Delete Product" onClick={() => handleDelete(row.productTypeID)}><FaArchive /></button>
+                <div className="action-buttons">
+                    <div className="tooltip-container">
+                        <button className="action-button edit" onClick={() => handleEdit(row)}><FaEdit /></button>
+                        <span className="tooltip-text">Edit</span>
+                    </div>
+                    <div className="tooltip-container">
+                        <button className="action-button delete" onClick={() => handleDelete(row.productTypeID)}><FaArchive /></button>
+                        <span className="tooltip-text">Delete</span>
+                    </div>
                 </div>
             ),
             width: "30%",

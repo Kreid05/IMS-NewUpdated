@@ -252,9 +252,18 @@ function Products() {
       name: "ACTIONS",
       cell: (row) => (
         <div className="action-buttons">
-          <button className="action-button view" title="View Product" onClick={() => handleView(row)}><FaEye /></button>
-          <button className="action-button edit" title="Edit Product" onClick={() => handleEdit(row)}><FaEdit /></button>
-          <button className="action-button delete" title="Delete Product" onClick={() => handleDelete(row.ProductID)}><FaArchive /></button>
+            <div className="tooltip-container">
+                <button className="action-button view" onClick={() => handleView(row)}><FaEye /></button>
+                <span className="tooltip-text">View</span>
+            </div>
+            <div className="tooltip-container">
+                <button className="action-button edit" onClick={() => handleEdit(row)}><FaEdit /></button>
+                <span className="tooltip-text">Edit</span>
+            </div>
+            <div className="tooltip-container">
+                <button className="action-button delete" onClick={() => handleDelete(row.ProductID)}><FaArchive /></button>
+                <span className="tooltip-text">Delete</span>
+            </div>
         </div>
       ),
       ignoreRowClick: true, width: "18%", center: true,
