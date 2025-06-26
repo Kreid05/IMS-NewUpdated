@@ -203,7 +203,7 @@ function RecipeManagement() {
             <Sidebar />
             <div className="roles">
 
-                <Header pageTitle="Recipe Management" />
+                <Header pageTitle="Product Composition Manager" />
 
                 <div className="recipeManagement-header">
                      <div className="recipe-top-row">

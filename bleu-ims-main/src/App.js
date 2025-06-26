@@ -1,6 +1,5 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from './components/login';
 import Dashboard from './components/manager/dashboard/dashboard';
 import RecipeManagement from './components/manager/recipeManagement/recipeManagement';
 import Products from './components/manager/products/products';
@@ -12,11 +11,20 @@ import IngredientsLogs from './components/manager/restockLogs/ingredientsLogs/in
 import MerchandiseLogs from './components/manager/restockLogs/merchandiseLogs/merchandiseLogs';
 import SuppliesLogs from './components/manager/restockLogs/suppliesLogs/suppliesLogs';
 
+
+function RedirectToLoginSystem() {
+  useEffect(() => {
+    window.location.href = "http://localhost:4002/";
+  }, []);
+
+  return null; // This will navigate to the login system of retailAuth
+}
+
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<RedirectToLoginSystem />} />
         <Route path="/manager/dashboard" element={<Dashboard />} />
         <Route path="/manager/recipeManagement" element={<RecipeManagement />} />
         <Route path="/manager/products" element={<Products />} />

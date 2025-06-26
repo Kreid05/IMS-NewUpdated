@@ -253,10 +253,6 @@ function Products() {
       cell: (row) => (
         <div className="action-buttons">
             <div className="tooltip-container">
-                <button className="action-button view" onClick={() => handleView(row)}><FaEye /></button>
-                <span className="tooltip-text">View</span>
-            </div>
-            <div className="tooltip-container">
                 <button className="action-button edit" onClick={() => handleEdit(row)}><FaEdit /></button>
                 <span className="tooltip-text">Edit</span>
             </div>
@@ -266,7 +262,10 @@ function Products() {
             </div>
         </div>
       ),
-      ignoreRowClick: true, width: "18%", center: true,
+      ignoreRowClick: true,
+      allowOverflow: true, 
+      width: "18%", 
+      center: true,
     },
   ];
 
@@ -289,7 +288,7 @@ function Products() {
       <Sidebar />
       <div className="roles">
 
-        <Header pageTitle="Product Management" />
+        <Header pageTitle="Menu Management" />
 
         <div className="product-header">
           <div className="product-top-row">
@@ -348,6 +347,7 @@ function Products() {
               highlightOnHover
               responsive
               pagination
+              onRowClicked={handleView}
               customStyles={{
                 headCells: {
                   style: {
@@ -361,7 +361,7 @@ function Products() {
                     letterSpacing: "1px",
                   },
                 },
-                rows: { style: { minHeight: "72px", alignItems: 'center' } },
+                rows: { style: { minHeight: "72px", alignItems: 'center', cursor: 'pointer' } },
                 cells: { style: { paddingLeft: '16px', paddingRight: '16px', textAlign: 'left' } },
               }}
               noDataComponent={<div>No products found.</div>}

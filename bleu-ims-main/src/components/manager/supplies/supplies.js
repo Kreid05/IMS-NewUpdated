@@ -197,10 +197,6 @@ function Supplies() {
                         <span className="tooltip-text">Restock</span>
                     </div>
                     <div className="tooltip-container">
-                        <button className="action-button view" onClick={() => handleView(row)}><FaEye /></button>
-                        <span className="tooltip-text">View</span>
-                    </div>
-                    <div className="tooltip-container">
                         <button className="action-button edit" onClick={() => handleEdit(row)}><FaEdit /></button>
                         <span className="tooltip-text">Edit</span>
                     </div>
@@ -272,6 +268,7 @@ function Supplies() {
                         highlightOnHover
                         responsive
                         pagination
+                        onRowClicked={handleView}
                         customStyles={{
                             headCells: {
                                 style: {
@@ -288,6 +285,7 @@ function Supplies() {
                             rows: {
                                 style: {
                                     minHeight: "55px",
+                                    cursor: "pointer",
                                 },
                             },
                         }}
