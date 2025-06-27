@@ -5,11 +5,13 @@ from fastapi.staticfiles import StaticFiles
 
 # routers
 from routers import materials
+from routers import materialbatches
 
-app = FastAPI(title="IMS Materials API")
+app = FastAPI(title="Materials Service")
 
 # include routers
 app.include_router(materials.router, prefix='/materials', tags=['materials'])
+app.include_router(materialbatches.router, prefix='/material-batches', tags=['material batches'])
 
 # CORS setup to allow frontend and backend on ports
 app.add_middleware(

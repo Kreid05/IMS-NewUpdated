@@ -32,6 +32,7 @@ function Merchandise() {
     const [showAddMerchandiseModal, setShowAddMerchandiseModal] = useState(false);
     const [showEditMerchandiseModal, setShowEditMerchandiseModal] = useState(false);
     const [selectedMerchandise, setSelectedMerchandise] = useState(null);
+    const [currentMerchandise, setCurrentMerchandise] = useState(null);
     const [showViewMerchandiseModal, setShowViewMerchandiseModal] = useState(false);
     const [showAddMerchandiseLogsModal, setShowAddMerchandiseLogsModal] = useState(false);
 
@@ -61,6 +62,11 @@ function Merchandise() {
         localStorage.removeItem('username');
         navigate('/');
     }, [navigate]);
+
+    const handleAddMerchandiseSubmit = () => {
+        setShowAddMerchandiseLogsModal(false);
+        fetchMerchandise();
+    };
     
     // authentication and authorization
     useEffect(() => {
@@ -192,7 +198,7 @@ function Merchandise() {
             cell: (row) => (
                 <div className="action-buttons">
                     <div className="tooltip-container">
-                        <button className="action-button restock" onClick={() => setShowAddMerchandiseLogsModal(true)}><FaRedoAlt /></button>
+                        <button className="action-button restock" onClick={() => { setCurrentMerchandise(row); setShowAddMerchandiseLogsModal(true); }}><FaRedoAlt /></button>
                         <span className="tooltip-text">Restock</span>
                     </div>
                     <div className="tooltip-container">
@@ -289,7 +295,7 @@ function Merchandise() {
                             rows: {
                                 style: {
                                     minHeight: "55px",
-                                    cursor: "pointer",
+                                    cursor: "pointer", // Makes rows clickable
                                 },
                             },
                         }}
@@ -330,24 +336,8 @@ function Merchandise() {
             {showAddMerchandiseLogsModal && (
                 <AddMerchandiseLogsModal
                     onClose={() => setShowAddMerchandiseLogsModal(false)}
-                    onSubmit={(formData) => {
-                        // Save new restock record to localStorage
-                        const existingRecords = JSON.parse(localStorage.getItem("newMerchandiseRestockRecords") || "[]");
-                        const newRecord = {
-                            id: Date.now(), // unique id based on timestamp
-                            merchandise: formData.merchandise,
-                            quantity: Number(formData.quantity),
-                            unit: formData.unit,
-                            batchDate: formData.batchDate,
-                            restockDate: formData.restockDate,
-                            loggedBy: formData.loggedBy,
-                            status: formData.status,
-                            notes: formData.notes || ""
-                        };
-                        localStorage.setItem("newMerchandiseRestockRecords", JSON.stringify([...existingRecords, newRecord]));
-                        setShowAddMerchandiseLogsModal(false);
-                        toast.success("Merchandise restock record added successfully!");
-                    }}
+                    onSubmit={handleAddMerchandiseSubmit}
+                    currentMerchandise={currentMerchandise}
                 />
             )}
             <ToastContainer />

@@ -7,64 +7,49 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "./merchandiseLogs.css";
 
-const sampleMerchandiseRecords = [
-    {
-        id: 1,
-        Merchandise: "Tumbler",
-        Quantity: 10,
-        Unit: "pcs",
-        BatchDate: "2024-05-20",
-        RestockDate: "2024-06-01",
-        LoggedBy: "John Doe",
-        Status: "Available",
-        Notes: "New batch"
-    },
-    {
-        id: 2,
-        Merchandise: "Notebook",
-        Quantity: 5,
-        Unit: "pcs",
-        BatchDate: "2024-05-22",
-        RestockDate: "2024-06-03",
-        LoggedBy: "Jane Smith",
-        Status: "Used",
-        Notes: "Super New Batch"
-    }
-];
+const API_BASE_URL = "http://127.0.0.1:8004";
 
 function MerchandiseLogs() {
-    const [merchandiseRecords, setMerchandiseRecords] = useState(sampleMerchandiseRecords);
+    const [merchandiseRecords, setMerchandiseRecords] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [sortOrder, setSortOrder] = useState('desc');
     const [showAddMerchandiseModal, setShowAddMerchandiseModal] = useState(false);
-    const [tempFormData, setTempFormData] = useState(null);
+
+    const getAuthToken = () => localStorage.getItem("authToken");
 
     useEffect(() => {
-        // On mount, read new restock records from localStorage and merge
-        const newRecordsRaw = JSON.parse(localStorage.getItem("newMerchandiseRestockRecords") || "[]");
-        if (newRecordsRaw.length > 0) {
-            // Normalize keys to match expected keys in merchandiseRecords
-            const newRecords = newRecordsRaw.map(r => ({
-                id: r.id,
-                Merchandise: r.merchandise || r.merchandise || "",
-                Quantity: r.quantity || r.Quantity || 0,
-                Unit: r.unit || r.Unit || "",
-                BatchDate: r.batchDate || r.BatchDate || "",
-                RestockDate: r.restockDate || r.RestockDate || "",
-                LoggedBy: r.loggedBy || r.LoggedBy || "",
-                Status: r.status || r.Status || "",
-                Notes: r.notes || r.Notes || ""
-            }));
+        const fetchMerchandiseBatches = async () => {
+            try {
+                const response = await fetch(`${API_BASE_URL}/merchandise-batches/merchandise-batches/`, {
+                    headers: {
+                        "Authorization": `Bearer ${getAuthToken()}`,
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error("Failed to fetch merchandise batches");
+                }
+                const data = await response.json();
 
-            setMerchandiseRecords(prevRecords => {
-                // Filter out duplicates by id if any
-                const existingIds = new Set(prevRecords.map(r => r.id));
-                const filteredNewRecords = newRecords.filter(r => !existingIds.has(r.id));
-                return [...prevRecords, ...filteredNewRecords];
-            });
-            // Clear the new records from localStorage
-            localStorage.removeItem("newMerchandiseRestockRecords");
-        }
+                const mapped = data.map(batch => ({
+                    id: batch.batch_id,
+                    Merchandise: batch.merchandise_name, 
+                    Quantity: batch.quantity,
+                    Unit: batch.unit,
+                    BatchDate: batch.batch_date,
+                    RestockDate: batch.restock_date,
+                    LoggedBy: batch.logged_by,
+                    Status: batch.status,
+                    Notes: batch.notes || ""
+                }));
+
+                setMerchandiseRecords(mapped);
+            } catch (error) {
+                console.error("Error fetching merchandise batches:", error);
+                toast.error("Failed to load merchandise batches.");
+            }
+        };
+
+        fetchMerchandiseBatches();
     }, []);
 
     const filteredSortedMerchandise = merchandiseRecords
@@ -80,30 +65,6 @@ function MerchandiseLogs() {
             const dateB = new Date(b.RestockDate);
             return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
         });
-
-    const capitalizeWords = (str) => {
-        return str.replace(/\b\w/g, char => char.toUpperCase());
-    };
-
-    const handleAddMerchandiseSubmit = (formData) => {
-        setMerchandiseRecords(prevRecords => [
-            ...prevRecords,
-            {
-                id: prevRecords.length > 0 ? prevRecords[prevRecords.length - 1].id + 1 : 1,
-                Merchandise: "",
-                Quantity: Number(formData.quantity),
-                Unit: formData.unit,
-                BatchDate: formData.batchDate,
-                RestockDate: formData.restockDate,
-                LoggedBy: formData.loggedBy,
-                Status: capitalizeWords(formData.status),
-                Notes: formData.notes || ""
-            }
-        ]);
-        setTempFormData(formData);
-        setShowAddMerchandiseModal(false);
-        toast.success("Merchandise restock record added successfully!");
-    };
 
     return (
         <div className="merchandise-logs">
@@ -137,7 +98,7 @@ function MerchandiseLogs() {
 
                     <DataTable
                         columns={[
-                            { name: "Merchandise", selector: row => row.Merchandise, sortable: true, width: "12%" },
+                            { name: "Name", selector: row => row.Merchandise, sortable: true, width: "12%" },
                             { name: "Quantity", selector: row => row.Quantity, width: "8%", center: true },
                             { name: "Unit", selector: row => row.Unit, width: "8%", center: true },
                             { name: "Batch Date", selector: row => row.BatchDate, width: "13%", center: true },
@@ -152,8 +113,6 @@ function MerchandiseLogs() {
                                 let className = "";
                                 if (row.Status === "Available") className = "status-available";
                                 else if (row.Status === "Used") className = "status-used";
-                                else className = ""; // fallback style if needed
-
                                 return <span className={className}>{row.Status}</span>;
                             }
                             },
@@ -190,8 +149,7 @@ function MerchandiseLogs() {
             {showAddMerchandiseModal && (
                 <AddMerchandiseModal
                     onClose={() => setShowAddMerchandiseModal(false)}
-                    onSubmit={handleAddMerchandiseSubmit}
-                    initialFormData={tempFormData}
+                    onSubmit={() => {}}
                 />
             )}
 

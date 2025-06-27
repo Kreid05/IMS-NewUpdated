@@ -32,6 +32,7 @@ function Supplies() {
     const [showAddSupplyModal, setShowAddSupplyModal] = useState(false);
     const [showEditSupplyModal, setShowEditSupplyModal] = useState(false);
     const [selectedSupply, setSelectedSupply] = useState(null);
+    const [currentSupply, setCurrentSupply] = useState(null);
     const [showViewSupplyModal, setShowViewSupplyModal] = useState(false);
     const [showAddSuppliesLogsModal, setShowAddSuppliesLogsModal] = useState(false);
 
@@ -61,6 +62,11 @@ function Supplies() {
         localStorage.removeItem('username');
         navigate('/');
     }, [navigate]);
+
+    const handleAddSupplySubmit = () => {
+        setShowAddSuppliesLogsModal(false);
+        fetchSupplies();
+    };
 
     // authentication and authorization
     useEffect(() => {
@@ -169,14 +175,14 @@ function Supplies() {
 
     const columns = [
         { name: "NO.", selector: (row, index) => index + 1, width: "5%" },
-        { name: "ITEM NAME", selector: (row) => row.MaterialName, sortable: true, width: "30%" },
+        { name: "ITEM NAME", selector: (row) => row.MaterialName, sortable: true, width: "15%" },
         { name: "QUANTITY", selector: (row) => row.MaterialQuantity, width: "15%", center: true },
-        { name: "UNIT", selector: (row) => row.MaterialMeasurement, width: "10%", center: true },
-        { name: "SUPPLY DATE", selector: (row) => row.DateAdded, width: "15%", center: true },
+        { name: "UNIT", selector: (row) => row.MaterialMeasurement, width: "15%", center: true },
+        { name: "SUPPLY DATE", selector: (row) => row.DateAdded, width: "18%", center: true },
         { 
             name: "STATUS", 
             selector: (row) => row.Status, 
-            width: "10%", 
+            width: "12%", 
             center: true,
             cell: (row) => {
                 let className = "";
@@ -193,7 +199,7 @@ function Supplies() {
             cell: (row) => (
                 <div className="action-buttons">
                     <div className="tooltip-container">
-                        <button className="action-button restock" onClick={() => setShowAddSuppliesLogsModal(true)}><FaRedoAlt /></button>
+                        <button className="action-button restock" onClick={() => { setCurrentSupply(row); setShowAddSuppliesLogsModal(true); }}><FaRedoAlt /></button>
                         <span className="tooltip-text">Restock</span>
                     </div>
                     <div className="tooltip-container">
@@ -208,7 +214,7 @@ function Supplies() {
             ),
             ignoreRowClick: true,
             allowOverflow: true,
-            width: "15%",
+            width: "20%",
             center: true
         },
     ];
@@ -336,24 +342,8 @@ function Supplies() {
             {showAddSuppliesLogsModal && (
                 <AddSuppliesLogsModal
                     onClose={() => setShowAddSuppliesLogsModal(false)}
-                    onSubmit={(formData) => {
-                        // Save new restock record to localStorage
-                        const existingRecords = JSON.parse(localStorage.getItem("newSuppliesRestockRecords") || "[]");
-                        const newRecord = {
-                            id: Date.now(), // unique id based on timestamp
-                            supplies: formData.supplies,
-                            quantity: Number(formData.quantity),
-                            unit: formData.unit,
-                            batchDate: formData.batchDate,
-                            restockDate: formData.restockDate,
-                            loggedBy: formData.loggedBy,
-                            status: formData.status,
-                            notes: formData.notes || ""
-                        };
-                        localStorage.setItem("newSuppliesRestockRecords", JSON.stringify([...existingRecords, newRecord]));
-                        setShowAddSuppliesLogsModal(false);
-                        toast.success("Supplies restock record added successfully!");
-                    }}
+                    onSubmit={handleAddSupplySubmit}
+                    currentSupply={currentSupply}
                 />
             )}
             <ToastContainer />

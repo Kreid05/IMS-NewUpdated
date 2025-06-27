@@ -1,72 +1,56 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from 'react';
 import Sidebar from "../../../sidebar";
 import Header from "../../../header";
-import DataTable from "react-data-table-component";
+import DataTable from 'react-data-table-component';
 import AddIngredientModal from './modals/addIngredientLogsModal';
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "./ingredientsLogs.css";
 
-const sampleIngredientRecords = [
-    {
-        id: 1,
-        Ingredient: "Tomato",
-        Quantity: 10,
-        Unit: "kg",
-        BatchDate: "2024-05-20",
-        RestockDate: "2024-06-01",
-        ExpirationDate: "2024-06-15",
-        LoggedBy: "John Doe",
-        Status: "Available",
-        Notes: "Fresh batch"
-    },
-    {
-        id: 2,
-        Ingredient: "Onion",
-        Quantity: 5,
-        Unit: "kg",
-        BatchDate: "2024-05-22",
-        RestockDate: "2024-06-03",
-        ExpirationDate: "2024-06-18",
-        LoggedBy: "Jane Smith",
-        Status: "Used",
-        Notes: "Awaiting quality check"
-    }
-];
+const API_BASE_URL = "http://127.0.0.1:8002";
 
 function IngredientsLogs() {
-    const [ingredientRecords, setIngredientRecords] = useState(sampleIngredientRecords);
+    const [ingredientRecords, setIngredientRecords] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [sortOrder, setSortOrder] = useState('desc');
     const [showAddIngredientModal, setShowAddIngredientModal] = useState(false);
-    const [tempFormData, setTempFormData] = useState(null);
+
+    const getAuthToken = () => localStorage.getItem("authToken");
 
     useEffect(() => {
-        // On mount, read new restock records from localStorage and merge
-        const newRecordsRaw = JSON.parse(localStorage.getItem("newIngredientRestockRecords") || "[]");
-        if (newRecordsRaw.length > 0) {
-            // Normalize keys to match expected keys in ingredientRecords
-            const newRecords = newRecordsRaw.map(r => ({
-                id: r.id,
-                Ingredient: r.ingredient || r.Ingredient || "",
-                Quantity: r.quantity || r.Quantity || 0,
-                Unit: r.unit || r.Unit || "",
-                BatchDate: r.batchDate || r.BatchDate || "",
-                RestockDate: r.restockDate || r.RestockDate || "",
-                LoggedBy: r.loggedBy || r.LoggedBy || "",
-                Status: r.status || r.Status || "",
-                Notes: r.notes || r.Notes || ""
-            }));
+        const fetchIngredientBatches = async () => {
+            try {
+                const response = await fetch(`${API_BASE_URL}/ingredient-batches/ingredient-batches/`, {
+                    headers: {
+                        "Authorization": `Bearer ${getAuthToken()}`,
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error("Failed to fetch ingredient batches");
+                }
+                const data = await response.json();
 
-            setIngredientRecords(prevRecords => {
-                // Filter out duplicates by id if any
-                const existingIds = new Set(prevRecords.map(r => r.id));
-                const filteredNewRecords = newRecords.filter(r => !existingIds.has(r.id));
-                return [...prevRecords, ...filteredNewRecords];
-            });
-            // Clear the new records from localStorage
-            localStorage.removeItem("newIngredientRestockRecords");
-        }
+                const mapped = data.map(batch => ({
+                    id: batch.batch_id,
+                    Ingredient: batch.ingredient_name, 
+                    Quantity: batch.quantity,
+                    Unit: batch.unit,
+                    BatchDate: batch.batch_date,
+                    RestockDate: batch.restock_date,
+                    ExpirationDate: batch.expiration_date,
+                    LoggedBy: batch.logged_by,
+                    Status: batch.status,
+                    Notes: batch.notes || ""
+                }));
+
+                setIngredientRecords(mapped);
+            } catch (error) {
+                console.error("Error fetching ingredient batches:", error);
+                toast.error("Failed to load ingredient batches.");
+            }
+        };
+
+        fetchIngredientBatches();
     }, []);
 
     const filteredSortedIngredients = ingredientRecords
@@ -82,31 +66,6 @@ function IngredientsLogs() {
             const dateB = new Date(b.RestockDate);
             return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
         });
-
-    const capitalizeWords = (str) => {
-        return str.replace(/\b\w/g, char => char.toUpperCase());
-    };
-
-    const handleAddIngredientSubmit = (formData) => {
-        setIngredientRecords(prevRecords => [
-            ...prevRecords,
-            {
-                id: prevRecords.length > 0 ? prevRecords[prevRecords.length - 1].id + 1 : 1,
-                Ingredient: "",
-                Quantity: Number(formData.quantity),
-                Unit: formData.unit,
-                BatchDate: formData.batchDate,
-                RestockDate: formData.restockDate,
-                ExpirationDate: formData.expirationDate,
-                LoggedBy: formData.loggedBy,
-                Status: capitalizeWords(formData.status),
-                Notes: formData.notes || ""
-            }
-        ]);
-        setTempFormData(formData);
-        setShowAddIngredientModal(false);
-        toast.success("Ingredient restock record added successfully!");
-    };
 
     return (
         <div className="ingredients-logs">
@@ -137,30 +96,27 @@ function IngredientsLogs() {
                     </div>
                 </div>
                 <div className="ingredients-logs-content">
-
-<DataTable
+                    <DataTable
                         columns={[
-                            { name: "Ingredient", selector: row => row.Ingredient, sortable: true, width: "10%" },
-                            { name: "Quantity", selector: row => row.Quantity, width: "8%", center: true },
+                            { name: "Name", selector: row => row.Ingredient, sortable: true, width: "10%" },
+                            { name: "Amount", selector: row => row.Quantity, width: "8%", center: true },
                             { name: "Unit", selector: row => row.Unit, width: "8%", center: true },
                             { name: "Batch Date", selector: row => row.BatchDate, width: "12%", center: true },
                             { name: "Restock Date", selector: row => row.RestockDate, width: "12%", center: true },
                             { name: "Expiration Date", selector: row => row.ExpirationDate, width: "12%", center: true },
                             { name: "Logged By", selector: row => row.LoggedBy, width: "10%", center: true },
-                            { 
-                            name: "Status", 
-                            selector: row => row.Status, 
-                            width: "8%", 
-                            center: true,
-                            cell: (row) => {
-                                let className = "";
-                                if (row.Status === "Available") className = "status-available";
-                                else if (row.Status === "Used") className = "status-used";
-                                else if (row.Status === "Expired") className = "status-expired";
-                                else className = ""; // fallback style if needed
-
-                                return <span className={className}>{row.Status}</span>;
-                            }
+                            {
+                                name: "Status",
+                                selector: row => row.Status,
+                                width: "8%",
+                                center: true,
+                                cell: (row) => {
+                                    let className = "";
+                                    if (row.Status === "Available") className = "status-available";
+                                    else if (row.Status === "Used") className = "status-used";
+                                    else if (row.Status === "Expired") className = "status-expired";
+                                    return <span className={className}>{row.Status}</span>;
+                                }
                             },
                             { name: "Notes", selector: row => row.Notes, width: "20%", center: true },
                         ]}
@@ -195,8 +151,7 @@ function IngredientsLogs() {
             {showAddIngredientModal && (
                 <AddIngredientModal
                     onClose={() => setShowAddIngredientModal(false)}
-                    onSubmit={handleAddIngredientSubmit}
-                    initialFormData={tempFormData}
+                    onSubmit={() => {}}
                 />
             )}
 

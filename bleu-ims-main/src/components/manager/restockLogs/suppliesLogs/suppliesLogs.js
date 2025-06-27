@@ -7,83 +7,57 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "./suppliesLogs.css";
 
-const sampleSuppliesRecords = [
-    {
-        id: 1,
-        Supplies: "Cups",
-        Quantity: 50,
-        Unit: "pcs",
-        BatchDate: "2024-05-20",
-        RestockDate: "2024-06-01",
-        LoggedBy: "Lim Alcovendas",
-        Status: "Available",
-        Notes: "Newly made"
-    },
-    {
-        id: 2,
-        Supplies: "Straw",
-        Quantity: 5,
-        Unit: "pcs",
-        BatchDate: "2024-05-22",
-        RestockDate: "2024-06-03",
-        LoggedBy: "Mark Regie Magtangob",
-        Status: "Used",
-        Notes: "Awaiting quality check"
-    },
-    {
-        id: 3,
-        Supplies: "Spoons",
-        Quantity: 0,
-        Unit: "pcs",
-        BatchDate: "2024-05-22",
-        RestockDate: "2024-06-03",
-        LoggedBy: "Jesalle Villegas",
-        Status: "Used",
-        Notes: "lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-    }
-];
+const API_BASE_URL = "http://127.0.0.1:8003";
 
 function SuppliesLogs() {
-    const [suppliesRecords, setSuppliesRecords] = useState(sampleSuppliesRecords);
+    const [suppliesRecords, setSuppliesRecords] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [sortOrder, setSortOrder] = useState('desc');
     const [showAddSuppliesModal, setShowAddSuppliesModal] = useState(false);
-    const [tempFormData, setTempFormData] = useState(null);
+
+    const getAuthToken = () => localStorage.getItem("authToken");
 
     useEffect(() => {
-        // On mount, read new restock records from localStorage and merge
-        const newRecordsRaw = JSON.parse(localStorage.getItem("newSuppliesRestockRecords") || "[]");
-        if (newRecordsRaw.length > 0) {
-            // Normalize keys to match expected keys in suppliesRecords
-            const newRecords = newRecordsRaw.map(r => ({
-                id: r.id,
-                Supplies: r.supplies || r.supplies || "",
-                Quantity: r.quantity || r.Quantity || 0,
-                Unit: r.unit || r.Unit || "",
-                BatchDate: r.batchDate || r.BatchDate || "",
-                RestockDate: r.restockDate || r.RestockDate || "",
-                LoggedBy: r.loggedBy || r.LoggedBy || "",
-                Status: r.status || r.Status || "",
-                Notes: r.notes || r.Notes || ""
-            }));
+        const fetchMaterialBatches = async () => {
+            try {
+                const response = await fetch(`${API_BASE_URL}/material-batches/material-batches/`, {
+                    headers: {
+                        "Authorization": `Bearer ${getAuthToken()}`,
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error("Failed to fetch material batches");
+                }
+                const data = await response.json();
 
-            setSuppliesRecords(prevRecords => {
-                // Filter out duplicates by id if any
-                const existingIds = new Set(prevRecords.map(r => r.id));
-                const filteredNewRecords = newRecords.filter(r => !existingIds.has(r.id));
-                return [...prevRecords, ...filteredNewRecords];
-            });
-            // Clear the new records from localStorage
-            localStorage.removeItem("newSuppliesRestockRecords");
-        }
+                const mapped = data.map(batch => ({
+                    id: batch.batch_id,
+                    Material: batch.material_name,
+                    Quantity: batch.quantity,
+                    Unit: batch.unit,
+                    BatchDate: batch.batch_date,
+                    RestockDate: batch.restock_date,
+                    LoggedBy: batch.logged_by,
+                    Status: batch.status,
+                    Notes: batch.notes || ""
+                }));
+
+                setSuppliesRecords(mapped);
+            } catch (error) {
+                console.error("Error fetching material batches:", error);
+                toast.error("Failed to load material batches.");
+            }
+        };
+
+        fetchMaterialBatches();
     }, []);
 
     const filteredSortedSupplies = suppliesRecords
         .filter(item => {
             const query = searchQuery.toLowerCase();
             return (
-                item.Supplies.toLowerCase().includes(query) ||
-                item.Status.toLowerCase().includes(query)
+                (item.Material || "").toLowerCase().includes(query) ||
+                (item.Status || "").toLowerCase().includes(query)
             );
         })
         .sort((a, b) => {
@@ -91,30 +65,6 @@ function SuppliesLogs() {
             const dateB = new Date(b.RestockDate);
             return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
         });
-
-    const capitalizeWords = (str) => {
-        return str.replace(/\b\w/g, char => char.toUpperCase());
-    };
-
-    const handleAddSuppliesSubmit = (formData) => {
-        setSuppliesRecords(prevRecords => [
-            ...prevRecords,
-            {
-                id: prevRecords.length > 0 ? prevRecords[prevRecords.length - 1].id + 1 : 1,
-                Supplies: "",
-                Quantity: Number(formData.quantity),
-                Unit: formData.unit,
-                BatchDate: formData.batchDate,
-                RestockDate: formData.restockDate,
-                LoggedBy: formData.loggedBy,
-                Status: capitalizeWords(formData.status),
-                Notes: formData.notes || ""
-            }
-        ]);
-        setTempFormData(formData);
-        setShowAddSuppliesModal(false);
-        toast.success("Supplies restock record added successfully!");
-    };
 
     return (
         <div className="supplies-logs">
@@ -148,7 +98,7 @@ function SuppliesLogs() {
 
                     <DataTable
                         columns={[
-                            { name: "Supplies", selector: row => row.Supplies, sortable: true, width: "10%" },
+                            { name: "Name", selector: row => row.Material, sortable: true, width: "10%" },
                             { name: "Quantity", selector: row => row.Quantity, width: "10%", center: true },
                             { name: "Unit", selector: row => row.Unit, width: "8%", center: true },
                             { name: "Batch Date", selector: row => row.BatchDate, width: "13%", center: true },
@@ -163,8 +113,6 @@ function SuppliesLogs() {
                                 let className = "";
                                 if (row.Status === "Available") className = "status-available";
                                 else if (row.Status === "Used") className = "status-used";
-                                else className = ""; // fallback style if needed
-
                                 return <span className={className}>{row.Status}</span>;
                             }
                             },
@@ -201,8 +149,7 @@ function SuppliesLogs() {
             {showAddSuppliesModal && (
                 <AddSuppliesModal
                     onClose={() => setShowAddSuppliesModal(false)}
-                    onSubmit={handleAddSuppliesSubmit}
-                    initialFormData={tempFormData}
+                    onSubmit={() => {}}
                 />
             )}
 

@@ -3,7 +3,9 @@ import "./addIngredientLogsModal.css";
 import { toast } from 'react-toastify';
 import ConfirmationIngredientLogsModal from "./confirmationIngredientLogsModal";
 
-function AddIngredientLogsModal({ onClose, onSubmit, initialFormData }) {
+const API_BASE_URL = "http://127.0.0.1:8002";
+
+function AddIngredientLogsModal({ onClose, onSubmit, selectedIngredient }) {
     const emptyFormData = {
         quantity: "",
         unit: "",
@@ -14,7 +16,7 @@ function AddIngredientLogsModal({ onClose, onSubmit, initialFormData }) {
         notes: ""
     };
 
-    const [formData, setFormData] = useState(initialFormData || emptyFormData);
+    const [formData, setFormData] = useState(emptyFormData);
 
     const [errors, setErrors] = useState({});
     const [showConfirmation, setShowConfirmation] = useState(false);
@@ -33,7 +35,6 @@ function AddIngredientLogsModal({ onClose, onSubmit, initialFormData }) {
         if (!formData.quantity) newErrors.quantity = "Quantity is required";
         if (!formData.unit) newErrors.unit = "Unit is required";
         if (!formData.batchDate) newErrors.batchDate = "Batch Date is required";
-        if (!formData.restockDate) newErrors.restockDate = "Restock Date is required";
         if (!formData.expirationDate) newErrors.expirationDate = "Expiration Date is required";
         if (!formData.loggedBy) newErrors.loggedBy = "Logged By is required";
         return newErrors;
@@ -49,28 +50,42 @@ function AddIngredientLogsModal({ onClose, onSubmit, initialFormData }) {
         setShowConfirmation(true);
     };
 
-    const handleConfirm = () => {
-        // Derive status based on quantity and expirationDate
-        const quantityValue = Number(formData.quantity);
-        const expirationDate = formData.expirationDate ? new Date(formData.expirationDate) : null;
-        const today = new Date();
-        let status = "Available";
+    const handleConfirm = async () => {
 
-        if (expirationDate && expirationDate < today) {
-            status = "Expired";
-        } else if (quantityValue === 0) {
-            status = "Used";
-        } else if (quantityValue > 0 && quantityValue <= 10) {
-            status = "Used";
-        } else if (quantityValue > 10) {
-            status = "Available";
+        const payload = {
+            ingredient_id: selectedIngredient?.IngredientID,
+            quantity: Number(formData.quantity),
+            unit: formData.unit,
+            batch_date: formData.batchDate,
+            expiration_date: formData.expirationDate,
+            logged_by: formData.loggedBy,
+            notes: formData.notes
+        };
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/ingredient-batches/ingredient-batches/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("authToken")}`
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to restock ingredient");
+            }
+
+            toast.success("Ingredient batch restocked successfully!");
+            setShowConfirmation(false);
+            setFormData(emptyFormData);
+            onSubmit(); // refresh
+        } catch (error) {
+            console.error("POST error:", error);
+            toast.error("Failed to restock ingredient.");
         }
-
-        const formDataWithStatus = { ...formData, status };
-        onSubmit(formDataWithStatus);
-        setShowConfirmation(false);
-        setFormData(emptyFormData);
     };
+
 
     const handleCancel = () => {
         setShowConfirmation(false);
@@ -139,24 +154,7 @@ function AddIngredientLogsModal({ onClose, onSubmit, initialFormData }) {
                                 </div>
                                 <div className="addIngredientLogs-form-group">
                                     <label>
-                                        Restock Date: <span className="addIngredientLogs-required-asterisk">*</span>
-                                    </label>
-                                    <input
-                                        type="date"
-                                        name="restockDate"
-                                        value={formData.restockDate}
-                                        onChange={handleChange}
-                                        onFocus={() => handleFocus("restockDate")}
-                                        className={errors.restockDate ? "error" : ""}
-                                    />
-                                    {errors.restockDate && <p className="addIngredientLogs-error-message">{errors.restockDate}</p>}
-                                </div>
-                            </div>
-
-                            <div className="addIngredientLogs-form-row">
-                                <div className="addIngredientLogs-form-group">
-                                    <label>
-                                        Expiration Date:
+                                        Expiration Date: <span className="addIngredientLogs-required-asterisk">*</span>
                                     </label>
                                     <input
                                         type="date"
@@ -168,6 +166,9 @@ function AddIngredientLogsModal({ onClose, onSubmit, initialFormData }) {
                                     />
                                     {errors.expirationDate && <p className="addIngredientLogs-error-message">{errors.expirationDate}</p>}
                                 </div>
+                            </div>
+
+                            <div className="addIngredientLogs-form-row">
                                 <div className="addIngredientLogs-form-group">
                                     <label>
                                         Logged By: <span className="addIngredientLogs-required-asterisk">*</span>

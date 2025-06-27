@@ -5,11 +5,13 @@ from fastapi.staticfiles import StaticFiles
 
 # routers
 from routers import merchandise
+from routers import merchandisebatches
 
-app = FastAPI(title="IMS Merchandise API")
+app = FastAPI(title="Merchandise Service")
 
 # include routers
 app.include_router(merchandise.router, prefix='/merchandise', tags=['merchandise'])
+app.include_router(merchandisebatches.router, prefix='/merchandise-batches', tags=['merchandise batches'])
 
 # CORS setup to allow frontend and backend on ports
 app.add_middleware(

@@ -31,6 +31,7 @@ function Ingredients() {
 
     const [showAddIngredientModal, setShowAddIngredientModal] = useState(false);
     const [showEditIngredientModal, setShowEditIngredientModal] = useState(false);
+    const [selectedIngredient, setSelectedIngredient] = useState(null);
     const [currentIngredient, setCurrentIngredient] = useState(null);
     const [showViewIngredientModal, setShowViewIngredientModal] = useState(false);
     const [showAddIngredientLogsModal, setShowAddIngredientLogsModal] = useState(false);
@@ -60,6 +61,11 @@ function Ingredients() {
         localStorage.removeItem('username');
         navigate('/');
     }, [navigate]);
+
+    const handleAddIngredientSubmit = () => {
+        setShowAddIngredientLogsModal(false);
+        fetchIngredients();
+    };
 
     // authentication and authorization
     useEffect(() => {
@@ -172,7 +178,7 @@ function Ingredients() {
         { name: "INGREDIENT NAME", selector: (row) => row.IngredientName, sortable: true, width: "15%" },
         { name: "AMOUNT", selector: (row) => row.Amount, width: "10%", center: true },
         { name: "UNIT", selector: (row) => row.Measurement, width: "10%", center: true },
-        { name: "BEST BEFORE DATE", selector: (row) => row.BestBeforeDate, width: "15%", center: true },
+        { name: "BATCH DATE", selector: (row) => row.BestBeforeDate, width: "15%", center: true },
         { name: "EXPIRATION DATE", selector: (row) => row.ExpirationDate, width: "15%", center: true },
         { 
             name: "STATUS", 
@@ -189,29 +195,29 @@ function Ingredients() {
                 return <span className={className}>{row.Status}</span>;
             }
         },
-        {
-            name: "ACTIONS",
-            cell: (row) => (
-                <div className="action-buttons">
-                    <div className="tooltip-container">
-                        <button className="action-button restock" onClick={() => setShowAddIngredientLogsModal(true)}><FaRedoAlt /></button>
-                        <span className="tooltip-text">Restock</span>
-                    </div>
-                    <div className="tooltip-container">
-                        <button className="action-button edit" onClick={() => handleEdit(row)}><FaEdit /></button>
-                        <span className="tooltip-text">Edit</span>
-                    </div>
-                    <div className="tooltip-container">
-                        <button className="action-button delete" onClick={() => handleDelete(row.IngredientID)}><FaArchive /></button>
-                        <span className="tooltip-text">Delete</span>
-                    </div>
-                </div>
-            ),
-            ignoreRowClick: true,
-            allowOverflow: true,
-            width: "20%",
-            center: true,
-        },
+                {
+                    name: "ACTIONS",
+                    cell: (row) => (
+                        <div className="action-buttons">
+                            <div className="tooltip-container">
+                                <button className="action-button restock" onClick={() => { setSelectedIngredient(row); setShowAddIngredientLogsModal(true); }}><FaRedoAlt /></button>
+                                <span className="tooltip-text">Restock</span>
+                            </div>
+                            <div className="tooltip-container">
+                                <button className="action-button edit" onClick={() => handleEdit(row)}><FaEdit /></button>
+                                <span className="tooltip-text">Edit</span>
+                            </div>
+                            <div className="tooltip-container">
+                                <button className="action-button delete" onClick={() => handleDelete(row.IngredientID)}><FaArchive /></button>
+                                <span className="tooltip-text">Delete</span>
+                            </div>
+                        </div>
+                    ),
+                    ignoreRowClick: true,
+                    allowOverflow: true,
+                    width: "20%",
+                    center: true,
+                },
     ];
 
     return (
@@ -291,7 +297,7 @@ function Ingredients() {
                             rows: {
                                 style: {
                                     minHeight: "55px",
-                                    cursor: "pointer"
+                                    cursor: "pointer",
                                 },
                             },
                         }}
@@ -333,26 +339,11 @@ function Ingredients() {
             {showAddIngredientLogsModal && (
                 <AddIngredientLogsModal
                     onClose={() => setShowAddIngredientLogsModal(false)}
-                    onSubmit={(formData) => {
-                        // Save new restock record to localStorage
-                        const existingRecords = JSON.parse(localStorage.getItem("newIngredientRestockRecords") || "[]");
-                        const newRecord = {
-                            id: Date.now(), // unique id based on timestamp
-                            ingredient: formData.ingredient,
-                            quantity: Number(formData.quantity),
-                            unit: formData.unit,
-                            batchDate: formData.batchDate,
-                            restockDate: formData.restockDate,
-                            loggedBy: formData.loggedBy,
-                            status: formData.status,
-                            notes: formData.notes || ""
-                        };
-                        localStorage.setItem("newIngredientRestockRecords", JSON.stringify([...existingRecords, newRecord]));
-                        setShowAddIngredientLogsModal(false);
-                        toast.success("Ingredient restock record added successfully!");
-                    }}
+                    onSubmit={handleAddIngredientSubmit}
+                    selectedIngredient={selectedIngredient} 
                 />
             )}
+
             <ToastContainer />
         </div>
     );

@@ -3,7 +3,9 @@ import "./addSuppliesLogsModal.css";
 import { toast } from 'react-toastify';
 import ConfirmationSuppliesLogsModal from "./confirmationSuppliesLogsModal";
 
-function AddSuppliesLogsModal({ onClose, onSubmit, initialFormData }) {
+const API_BASE_URL = "http://127.0.0.1:8003";
+
+function AddSuppliesLogsModal({ onClose, onSubmit, currentSupply }) {
     const emptyFormData = {
         quantity: "",
         unit: "",
@@ -13,7 +15,7 @@ function AddSuppliesLogsModal({ onClose, onSubmit, initialFormData }) {
         notes: ""
     };
 
-    const [formData, setFormData] = useState(initialFormData || emptyFormData);
+    const [formData, setFormData] = useState(emptyFormData);
 
     const [errors, setErrors] = useState({});
     const [showConfirmation, setShowConfirmation] = useState(false);
@@ -32,7 +34,6 @@ function AddSuppliesLogsModal({ onClose, onSubmit, initialFormData }) {
         if (!formData.quantity) newErrors.quantity = "Quantity is required";
         if (!formData.unit) newErrors.unit = "Unit is required";
         if (!formData.batchDate) newErrors.batchDate = "Batch Date is required";
-        if (!formData.restockDate) newErrors.restockDate = "Restock Date is required";
         if (!formData.loggedBy) newErrors.loggedBy = "Logged By is required";
         return newErrors;
     };
@@ -47,21 +48,39 @@ function AddSuppliesLogsModal({ onClose, onSubmit, initialFormData }) {
         setShowConfirmation(true);
     };
 
-    const handleConfirm = () => {
-        // Derive status based on quantity
-        const quantityValue = Number(formData.quantity);
-        let status = "Available";
-        if (quantityValue > 10) {
-            status = "Available";
-        } else if (quantityValue === 0) {
-            status = "Used";
-        } else if (quantityValue > 0 && quantityValue <= 10) {
-            status = "Used";
+    const handleConfirm = async () => {
+
+        const payload = {
+            material_id: currentSupply?.MaterialID,
+            quantity: Number(formData.quantity),
+            unit: formData.unit,
+            batch_date: formData.batchDate,
+            logged_by: formData.loggedBy,
+            notes: formData.notes
+        };
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/material-batches/material-batches/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("authToken")}`
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to restock supplies");
+            }
+
+            toast.success("Supply restocked successfully!");
+            setShowConfirmation(false);
+            setFormData(emptyFormData);
+            onSubmit(); // refresh
+        } catch (error) {
+            console.error("POST error:", error);
+            toast.error("Failed to restock supply.");
         }
-        const formDataWithStatus = { ...formData, status };
-        onSubmit(formDataWithStatus);
-        setShowConfirmation(false);
-        setFormData(emptyFormData);
     };
 
     const handleCancel = () => {
@@ -127,20 +146,6 @@ function AddSuppliesLogsModal({ onClose, onSubmit, initialFormData }) {
                                         className={errors.batchDate ? "error" : ""}
                                     />
                                     {errors.batchDate && <p className="addSuppliesLogs-error-message">{errors.batchDate}</p>}
-                                </div>
-                                <div className="addSuppliesLogs-form-group">
-                                    <label>
-                                        Restock Date: <span className="addSuppliesLogs-required-asterisk">*</span>
-                                    </label>
-                                    <input
-                                        type="date"
-                                        name="restockDate"
-                                        value={formData.restockDate}
-                                        onChange={handleChange}
-                                        onFocus={() => handleFocus("restockDate")}
-                                        className={errors.restockDate ? "error" : ""}
-                                    />
-                                    {errors.restockDate && <p className="addSuppliesLogs-error-message">{errors.restockDate}</p>}
                                 </div>
                             </div>
 

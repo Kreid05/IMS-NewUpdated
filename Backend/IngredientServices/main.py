@@ -5,11 +5,13 @@ from fastapi.staticfiles import StaticFiles
 
 # routers
 from routers import ingredients
+from routers import ingredientbatches
 
-app = FastAPI(title="IMS Ingredients API")
+app = FastAPI(title="Ingredients Service")
 
 # include routers
 app.include_router(ingredients.router, prefix='/ingredients', tags=['ingredients'])
+app.include_router(ingredientbatches.router, prefix = '/ingredient-batches', tags=['ingredient batches'])
 
 # CORS setup to allow frontend and backend on ports 
 app.add_middleware(
