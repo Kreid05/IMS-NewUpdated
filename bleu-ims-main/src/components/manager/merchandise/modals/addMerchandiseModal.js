@@ -16,14 +16,18 @@ function AddMerchandiseModal({ onClose, onSubmit}) {
         dateAdded: ""
     });
     
+    const validate = () => {
+        const newErrors = {};
+        if (!merchName) newErrors.merchName = "This field is required";
+        if (!quantity) newErrors.quantity = "This field is required";
+        if (!dateAdded) newErrors.dateAdded = "This field is required";
+        return newErrors;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const newErrors = {};
-        if (!merchName) newErrors.MerchandiseName = "This field is required";
-        if (!quantity) newErrors.MerchandiseQuantity = "This field is required";
-        if (!dateAdded) newErrors.MerchandiseDateAdded = "This field is required";
-
+        const newErrors = validate();
         setErrors(newErrors);
 
         if (Object.keys(newErrors).length === 0) {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../../sidebar";
 import Header from "../../header";
 import DataTable from "react-data-table-component";
@@ -8,40 +8,13 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "./waste.css";
 
-const sampleWasteRecords = [
-    {
-        id: 1,
-        ItemType: "Ingredient",
-        ItemName: "Tomato",
-        BatchNo: "1",
-        Amount: 10,
-        Unit: "kg",
-        Reason: "Spoiled",
-        Date: "2024-06-01",
-        LoggedBy: "John Doe",
-        Notes: "Left out in sun"
-    },
-    {
-        id: 2,
-        ItemType: "Merchandise",
-        ItemName: "T-shirt",
-        BatchNo: "2",
-        Amount: 5,
-        Unit: "pcs",
-        Reason: "Damaged",
-        Date: "2024-06-02",
-        LoggedBy: "Jane Smith",
-        Notes: "Torn sleeves"
-    }
-];
-
 function Waste() {
-    const [wasteRecords, setWasteRecords] = useState(sampleWasteRecords);
+    const [wasteRecords, setWasteRecords] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [sortOrder, setSortOrder] = useState('desc');
     const [showAddWasteModal, setShowAddWasteModal] = useState(false);
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-    const [tempFormData, setTempFormData] = useState(null);
+    const [tempFormList, setTempFormList] = useState(null);
     const [selectedWaste, setSelectedWaste] = useState(null);
 
     const filteredSortedWaste = wasteRecords
@@ -57,23 +30,133 @@ function Waste() {
             const dateB = new Date(b.Date);
             return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
         });
+    
+    useEffect(() => {
+        const fetchWasteData = async () => {
+            try {
+                const token = localStorage.getItem("authToken");
 
-    const handleAddWasteSubmit = (formData) => {
-        setTempFormData(formData);
+                // urls
+                const WASTE_URL = "http://127.0.0.1:8006/wastelogs/wastelogs/";
+                const ING_URL = "http://127.0.0.1:8002/ingredients/ingredients/";
+                const ING_BATCH_URL = "http://127.0.0.1:8002/ingredient-batches/ingredient-batches/";
+                const MAT_URL = "http://127.0.0.1:8003/materials/materials/";
+                const MAT_BATCH_URL = "http://127.0.0.1:8003/material-batches/material-batches/";
+                const MERCH_URL = "http://127.0.0.1:8004/merchandise/merchandise/";
+                const MERCH_BATCH_URL = "http://127.0.0.1:8004/merchandise-batches/merchandise-batches/";
+
+                const headers = { Authorization: `Bearer ${token}` };
+
+                // fetch all data in parallel
+                const [
+                    wasteRes, ingRes, ingBatchRes,
+                    matRes, matBatchRes,
+                    merchRes, merchBatchRes
+                ] = await Promise.all([
+                    fetch(WASTE_URL, { headers }),
+                    fetch(ING_URL, { headers }),
+                    fetch(ING_BATCH_URL, { headers }),
+                    fetch(MAT_URL, { headers }),
+                    fetch(MAT_BATCH_URL, { headers }),
+                    fetch(MERCH_URL, { headers }),
+                    fetch(MERCH_BATCH_URL, { headers }),
+                ]);
+
+                if (
+                    !wasteRes.ok || !ingRes.ok || !ingBatchRes.ok ||
+                    !matRes.ok || !matBatchRes.ok ||
+                    !merchRes.ok || !merchBatchRes.ok
+                ) {
+                    throw new Error("Failed to fetch data");
+                }
+
+                const [
+                    wastes, ingredients, ingBatches,
+                    materials, matBatches,
+                    merchandise, merchBatches
+                ] = await Promise.all([
+                    wasteRes.json(), ingRes.json(), ingBatchRes.json(),
+                    matRes.json(), matBatchRes.json(),
+                    merchRes.json(), merchBatchRes.json()
+                ]);
+
+                // build maps
+                const ingredientMap = Object.fromEntries(
+                    ingredients.map(item => [item.IngredientID || item.ingredient_id, item.IngredientName || item.ingredient_name])
+                );
+                const materialMap = Object.fromEntries(
+                    materials.map(item => [item.MaterialID || item.material_id, item.MaterialName || item.material_name])
+                );
+                const merchandiseMap = Object.fromEntries(
+                    merchandise.map(item => [item.MerchandiseID || item.merchandise_id, item.MerchandiseName || item.merchandise_name])
+                );
+
+                // batch number (FIFO)
+                const ingBatchMap = Object.fromEntries(
+                    [...ingBatches]
+                        .sort((a, b) => new Date(a.RestockDate || a.restock_date) - new Date(b.RestockDate || b.restock_date))
+                        .map((batch, index) => [(batch.BatchID || batch.batch_id), `Batch ${index + 1}`])
+                );
+
+                const matBatchMap = Object.fromEntries(
+                    [...matBatches]
+                        .sort((a, b) => new Date(a.RestockDate || a.restock_date) - new Date(b.RestockDate || b.restock_date))
+                        .map((batch, index) => [(batch.BatchID || batch.batch_id), `Batch ${index + 1}`])
+                );
+
+                const merchBatchMap = Object.fromEntries(
+                    [...merchBatches]
+                        .sort((a, b) => new Date(a.RestockDate || a.restock_date) - new Date(b.RestockDate || b.restock_date))
+                        .map((batch, index) => [(batch.BatchID || batch.batch_id), `Batch ${index + 1}`])
+                );
+
+                const mapped = wastes.map(log => {
+                    const type = log.ItemType.toLowerCase();
+                    const batchId = log.BatchID || log.batch_id;
+                    const itemId = log.ItemID || log.item_id;
+
+                    let itemName = "Not Found";
+                    let batchLabel = "-";
+
+                    if (type === "ingredient") {
+                        itemName = ingredientMap[itemId] || "Ingredient Not Found";
+                        batchLabel = ingBatchMap[batchId] || "Batch Not Found";
+                    } else if (type === "material") {
+                        itemName = materialMap[itemId] || "Material Not Found";
+                        batchLabel = matBatchMap[batchId] || "Batch Not Found";
+                    } else if (type === "merchandise") {
+                        itemName = merchandiseMap[itemId] || "Merchandise Not Found";
+                        batchLabel = merchBatchMap[batchId] || "Batch Not Found";
+                    }
+
+                    return {
+                        ItemType: log.ItemType.charAt(0).toUpperCase() + log.ItemType.slice(1),
+                        ItemName: itemName,
+                        BatchNo: batchLabel,
+                        Amount: log.Amount,
+                        Unit: log.Unit,
+                        Reason: log.WasteReason,
+                        Date: new Date(log.WasteDate).toLocaleDateString(),
+                        LoggedBy: log.LoggedBy,
+                        Notes: log.Notes || ""
+                    };
+                });
+                setWasteRecords(mapped);
+            } catch (error) {
+                console.error("Error loading waste logs:", error);
+                toast.error("Failed to load waste records.");
+            }
+        };
+
+
+        fetchWasteData();
+    }, []);
+
+    const handleAddWasteSubmit = (logsArray) => {
+        setWasteRecords(prevRecords => [...logsArray, ...prevRecords]);
         setShowAddWasteModal(false);
-        setShowConfirmationModal(true);
-    };
-
-    const handleConfirm = () => {
-        setWasteRecords(prev => [...prev, { id: prev.length + 1, ...tempFormData }]);
-        setTempFormData(null);
-        setShowConfirmationModal(false);
-        toast.success("Waste record added successfully!");
-    };
-
-    const handleCancelConfirmation = () => {
-        setShowConfirmationModal(false);
-        setShowAddWasteModal(true);
+        // Remove or comment out showing confirmation modal as it's handled in addWasteModal
+        // setShowConfirmationModal(true);
     };
 
     return (
@@ -152,16 +235,7 @@ function Waste() {
                 <AddWasteModal
                     onClose={() => setShowAddWasteModal(false)}
                     onSubmit={handleAddWasteSubmit}
-                    initialFormData={tempFormData}
-                />
-            )}
-
-            {showConfirmationModal && (
-                <ConfirmationModal
-                    visible={showConfirmationModal}
-                    formData={tempFormData}
-                    onConfirm={handleConfirm}
-                    onCancel={handleCancelConfirmation}
+                    initialFormData={tempFormList}
                 />
             )}
 

@@ -40,16 +40,20 @@ function AddIngredientModal({ onClose, onSuccess }) {
         }
     }, [handleLogout]);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
+    const validate = () => {
         const newErrors = {};
         if (!ingredientName) newErrors.ingredientName = "This field is required";
         if (!amount || isNaN(parseFloat(amount))) newErrors.amount = "A valid number is required";
         if (!measurement) newErrors.measurement = "This field is required";
         if (!bestBeforeDate) newErrors.bestBeforeDate = "This field is required";
         if (!expirationDate) newErrors.expirationDate = "This field is required";
+        return newErrors;
+    };
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const newErrors = validate();
         setErrors(newErrors);
 
         if (Object.keys(newErrors).length === 0) {

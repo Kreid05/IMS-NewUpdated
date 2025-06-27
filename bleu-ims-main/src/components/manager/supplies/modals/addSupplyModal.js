@@ -18,15 +18,19 @@ function AddSupplyModal({ onClose, onSubmit }) {
         supplyDate: "",
     });
 
+    const validate = () => {
+        const newErrors = {};
+        if (!supplyName) newErrors.supplyName = "This field is required";
+        if (!quantity) newErrors.quantity = "This field is required";
+        if (!measurement) newErrors.measurement = "This field is required";
+        if (!supplyDate) newErrors.supplyDate = "This field is required";
+        return newErrors;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const newErrors = {};
-        if (!supplyName) newErrors.MaterialName = "This field is required";
-        if (!quantity) newErrors.MaterialQuantity = "This field is required";
-        if (!measurement) newErrors.MaterialMeasurement = "This field is required";
-        if (!supplyDate) newErrors.DateAdded = "This field is required";
-
+        const newErrors = validate();
         setErrors(newErrors);
 
          if (Object.keys(newErrors).length === 0) {

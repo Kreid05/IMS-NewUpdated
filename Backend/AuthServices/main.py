@@ -35,7 +35,8 @@ app.add_middleware(
         "http://127.0.0.1:8004",  # ims (merchandiseservice)
         "http://localhost:8004", 
         "http://127.0.0.1:8005",  # ims (recipeservice)
-        "http://localhost:8005", 
+        "http://localhost:8005",
+        "http://127.0.0.1:8006",  # ims (wasteservices)
 
         # OOS frontend and services
         "http://localhost:5000",  # oos frontend

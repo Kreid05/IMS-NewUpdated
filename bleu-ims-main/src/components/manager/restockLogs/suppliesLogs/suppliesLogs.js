@@ -7,6 +7,18 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "./suppliesLogs.css";
 
+function formatDateTime(dateString) {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    if (isNaN(date)) return "";
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
+}
+
 const API_BASE_URL = "http://127.0.0.1:8003";
 
 function SuppliesLogs() {
@@ -36,7 +48,7 @@ function SuppliesLogs() {
                     Quantity: batch.quantity,
                     Unit: batch.unit,
                     BatchDate: batch.batch_date,
-                    RestockDate: batch.restock_date,
+                    RestockDate: formatDateTime (batch.restock_date),
                     LoggedBy: batch.logged_by,
                     Status: batch.status,
                     Notes: batch.notes || ""
