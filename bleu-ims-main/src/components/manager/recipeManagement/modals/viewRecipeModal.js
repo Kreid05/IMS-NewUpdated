@@ -13,7 +13,7 @@ function ViewRecipeModal({ recipe, onClose, onEdit }) {
                 </div>
                 <div className="viewRecipe-modal-content">
                     <div className="recipe-detail">
-                        <h4>Recipe Name</h4>
+                        <h4>Product Name</h4>
                         <p>{recipe.RecipeName}</p>
                     </div>
 

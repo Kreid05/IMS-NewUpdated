@@ -12,7 +12,10 @@
 
 /* Sidebar Styles */
 .sidebar-container {
-  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 110vh;
   width: 100% !important;
   transition: width 0.3s ease;
   background-color: #fff;
@@ -28,11 +31,6 @@
   justify-content: flex-start !important;
   padding-left: 15px !important;
   text-align: left;
-}
-
-/* Sidebar inner container */
-.side-container {
-  padding: 0 10px;
 }
 
 /* LOGO visibility for both collapsed and expanded */

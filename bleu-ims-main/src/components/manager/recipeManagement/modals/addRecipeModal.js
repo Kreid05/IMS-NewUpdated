@@ -16,7 +16,7 @@ function AddRecipeModal({ onClose, onSubmit, type, products, initialIngredients,
     const [errors, setErrors] = useState({});
     const [filteredProducts, setFilteredProducts] = useState([]);
     const navigate = useNavigate();
-    
+
     const handleLogout = useCallback(() => {
         localStorage.removeItem('authToken');
         localStorage.removeItem('username');
@@ -41,7 +41,7 @@ function AddRecipeModal({ onClose, onSubmit, type, products, initialIngredients,
         const selectedCategory = e.target.value;
         setCategory(selectedCategory);
         setProduct("");
-
+        setRecipeName("");
         if (selectedCategory) {
             const newFilteredList = products.filter(p => p.ProductCategory === selectedCategory);
             setFilteredProducts(newFilteredList);
@@ -86,7 +86,6 @@ function AddRecipeModal({ onClose, onSubmit, type, products, initialIngredients,
     const handleSubmit = async (e) => {
         e.preventDefault();
         const newErrors = {};
-        if (!recipeName) newErrors.recipeName = "Recipe name is required";
         if (!product) newErrors.product = "Product is required";
         if (!category) newErrors.category = "Category is required";
         if (ingredients.length === 0) newErrors.ingredients = "At least one ingredient is required";
@@ -157,11 +156,6 @@ function AddRecipeModal({ onClose, onSubmit, type, products, initialIngredients,
                     <span className="addRecipe-close-button" onClick={onClose}>×</span>
                 </div>
                 <form className="addRecipe-modal-form" onSubmit={handleSubmit}>
-                    <div className="recipe-form-group">
-                        <label>Recipe Name <span className="required">*</span></label>
-                        <input type="text" value={recipeName} onChange={(e) => setRecipeName(e.target.value)} onFocus={() => handleFocus('recipeName')} className={errors.recipeName ? 'error' : ''}/>
-                        {errors.recipeName && <p className="error-message">{errors.recipeName}</p>}
-                    </div>
 
                     <div className="recipe-form-row">
                         <div className="recipe-form-group">
@@ -176,7 +170,19 @@ function AddRecipeModal({ onClose, onSubmit, type, products, initialIngredients,
                         </div>
                         <div className="recipe-form-group">
                             <label>Product <span className="required">*</span></label>
-                            <select value={product} onChange={(e) => setProduct(e.target.value)} onFocus={() => handleFocus('product')} className={errors.product ? 'error' : ''} disabled={!category}>
+                            <select
+                                value={product}
+                                onChange={(e) => {
+                                    const selectedProductID = e.target.value;
+                                    setProduct(selectedProductID);
+                                    const selectedProduct = filteredProducts.find(p => p.ProductID.toString() === selectedProductID);
+                                    setRecipeName(selectedProduct ? selectedProduct.ProductName : "");
+                                    handleFocus('product');
+                                }}
+                                onFocus={() => handleFocus('product')}
+                                className={errors.product ? 'error' : ''}
+                                disabled={!category}
+                            >
                                 <option value="">Select a product</option>
                                 {filteredProducts.map(p => (
                                     <option key={p.ProductID} value={p.ProductID}>{p.ProductName}</option>
@@ -192,9 +198,23 @@ function AddRecipeModal({ onClose, onSubmit, type, products, initialIngredients,
                         {ingredients.length > 0 && ingredients.map((ingredient, index) => (
                             <div key={index} className="recipe-item">
                                 <div className="recipe-item-row">
-                                    <div className="recipe-item-field"><label>Ingredient</label><select value={ingredient.name} onChange={(e) => handleIngredientChange(index, 'name', e.target.value)}><option value="">Select an ingredient</option>{initialIngredients && initialIngredients.map(ing => (<option key={ing.IngredientID} value={ing.IngredientID}>{ing.IngredientName}</option>))}</select></div>
-                                    <div className="recipe-item-field"><label>Amount</label><input type="number" value={ingredient.amount} onChange={(e) => handleIngredientChange(index, 'amount', e.target.value)} /></div> {/* <-- FIX WAS HERE */}
-                                    <div className="recipe-item-field"><label>Unit</label><input type="text" value={ingredient.measurement} onChange={(e) => handleIngredientChange(index, 'measurement', e.target.value)} /></div>
+                                    <div className="recipe-item-field">
+                                        <label>Ingredient</label>
+                                        <select value={ingredient.name} onChange={(e) => handleIngredientChange(index, 'name', e.target.value)}>
+                                            <option value="">Select an ingredient</option>
+                                            {initialIngredients && initialIngredients.map(ing => (
+                                                <option key={ing.IngredientID} value={ing.IngredientID}>{ing.IngredientName}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div className="recipe-item-field">
+                                        <label>Amount</label>
+                                        <input type="number" value={ingredient.amount} onChange={(e) => handleIngredientChange(index, 'amount', e.target.value)} />
+                                    </div>
+                                    <div className="recipe-item-field">
+                                        <label>Unit</label>
+                                        <input type="text" value={ingredient.measurement} onChange={(e) => handleIngredientChange(index, 'measurement', e.target.value)} />
+                                    </div>
                                     <button type="button" onClick={() => handleRemoveIngredient(index)} className="recipe-remove-button">Remove</button>
                                 </div>
                             </div>
@@ -208,9 +228,25 @@ function AddRecipeModal({ onClose, onSubmit, type, products, initialIngredients,
                         {recipeSupplies.length > 0 && recipeSupplies.map((supply, index) => (
                             <div key={index} className="recipe-item">
                                 <div className="recipe-item-row">
-                                    <div className="recipe-item-field"><label>Supply</label><select value={supply.name} onChange={(e) => handleSupplyChange(index, 'name', e.target.value)}><option value="">Select a supply</option>{availableSupplies && availableSupplies.map(sup => (<option key={sup.MaterialID || sup.SupplyID} value={sup.MaterialID || sup.SupplyID}>{sup.MaterialName || sup.SupplyName}</option>))}</select></div>
-                                    <div className="recipe-item-field"><label>Amount</label><input type="number" value={supply.amount} onChange={(e) => handleSupplyChange(index, 'amount', e.target.value)} /></div>
-                                    <div className="recipe-item-field"><label>Unit</label><input type="text" value={supply.measurement} onChange={(e) => handleSupplyChange(index, 'measurement', e.target.value)} /></div>
+                                    <div className="recipe-item-field">
+                                        <label>Supply</label>
+                                        <select value={supply.name} onChange={(e) => handleSupplyChange(index, 'name', e.target.value)}>
+                                            <option value="">Select a supply</option>
+                                            {availableSupplies && availableSupplies.map(sup => (
+                                                <option key={sup.MaterialID || sup.SupplyID} value={sup.MaterialID || sup.SupplyID}>
+                                                    {sup.MaterialName || sup.SupplyName}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div className="recipe-item-field">
+                                        <label>Amount</label>
+                                        <input type="number" value={supply.amount} onChange={(e) => handleSupplyChange(index, 'amount', e.target.value)} />
+                                    </div>
+                                    <div className="recipe-item-field">
+                                        <label>Unit</label>
+                                        <input type="text" value={supply.measurement} onChange={(e) => handleSupplyChange(index, 'measurement', e.target.value)} />
+                                    </div>
                                     <button type="button" onClick={() => handleRemoveSupply(index)} className="recipe-remove-button">Remove</button>
                                 </div>
                             </div>
