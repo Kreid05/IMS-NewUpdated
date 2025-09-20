@@ -24,7 +24,7 @@ app.add_middleware(
         "http://localhost:4000",
 
         # POS
-        "http://localhost:9000",  # frontend
+        "http://localhost:9000",  # backend
         "http://192.168.100.10:9000",
 
         # OOS

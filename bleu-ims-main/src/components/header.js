@@ -2,10 +2,12 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from 'react-router-dom';
 import { FaChevronDown, FaBell } from "react-icons/fa";
 import { jwtDecode } from 'jwt-decode';
+import NotificationModal from './manager/notification/notification';
 import "./header.css";
 
 const Header = ({ pageTitle }) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [userName, setUserName] = useState("Admin User");
   const [userRole, setUserRole] = useState("Admin");
@@ -13,6 +15,14 @@ const Header = ({ pageTitle }) => {
 
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
+  };
+
+  const toggleNotification = () => {
+    setIsNotificationOpen(!isNotificationOpen);
+  };
+
+  const closeNotification = () => {
+    setIsNotificationOpen(false);
   };
 
   const handleLogout = useCallback(() => {
@@ -29,7 +39,7 @@ const Header = ({ pageTitle }) => {
     if (usernameFromUrl && tokenFromUrl) {
       localStorage.setItem('username', usernameFromUrl);
       localStorage.setItem('authToken', tokenFromUrl);
-   
+
       if (window.history.replaceState) {
         const cleanUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
         window.history.replaceState({ path: cleanUrl }, '', cleanUrl);
@@ -52,7 +62,7 @@ const Header = ({ pageTitle }) => {
       console.log("No session found. Redirecting to login.");
       navigate('/');
     }
-  }, [navigate, handleLogout]); 
+  }, [navigate, handleLogout]);
 
   useEffect(() => {
     const timerId = setInterval(() => setCurrentDate(new Date()), 1000);
@@ -86,7 +96,7 @@ const Header = ({ pageTitle }) => {
           <div className="dropdown-icon" onClick={toggleDropdown}>
             <FaChevronDown />
           </div>
-          <div className="bell-icon">
+          <div className="bell-icon" onClick={toggleNotification} style={{ cursor: 'pointer' }}>
             <FaBell className="bell-outline" />
           </div>
           {isDropdownOpen && (
@@ -99,6 +109,11 @@ const Header = ({ pageTitle }) => {
           )}
         </div>
       </div>
+
+      <NotificationModal
+        isOpen={isNotificationOpen}
+        onClose={closeNotification}
+      />
     </header>
   );
 };

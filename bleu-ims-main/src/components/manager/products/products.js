@@ -15,7 +15,6 @@ import { confirmAlert } from 'react-confirm-alert';
 import "../../reactConfirmAlert.css";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 import loadingAnimation from "../../../assets/animation/loading.webm";
 
 const API_BASE_URL = "http://127.0.0.1:8001";
